@@ -1,12 +1,18 @@
-
+'use client'
 import React from 'react';
+import { motion } from 'framer-motion';
 import DashboardMockup from './DashboardMockup';
 
 const Hero: React.FC = () => {
   return (
     <section className="lg:pt-48 lg:pb-32 pt-32 pb-20 relative z-10">
-      <div className="text-center max-w-7xl mx-auto px-6">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-[10px] font-medium tracking-wide uppercase mb-8 animate-fade-in-up">
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, ease: "easeOut" }}
+        className="text-center max-w-7xl mx-auto px-6"
+      >
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-[10px] font-medium tracking-wide uppercase mb-8">
           <span className="relative flex h-2 w-2">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
             <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
@@ -36,7 +42,7 @@ const Hero: React.FC = () => {
         </div>
 
         <DashboardMockup />
-      </div>
+      </motion.div>
     </section>
   );
 };
