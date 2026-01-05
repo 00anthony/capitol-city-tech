@@ -16,7 +16,7 @@
     background-image: linear-gradient(to right, #1e293b 1px, transparent 1px),
                       linear-gradient(to bottom, #1e293b 1px, transparent 1px);
     background-size: 50px 50px;
-    mask-image: radial-gradient(circle at center, black 30%, transparent 100%);
+    mask-image: radial-gradient(circle at center, black 40%, transparent 100%);
   }
 
   .glass-panel {
@@ -27,7 +27,8 @@
   }
   
   .text-glow {
-    text-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
+    @apply text-blue-400;
+    text-shadow: 0 0 25px rgba(59, 130, 246, 0.5);
   }
 
   .dashboard-scroll::-webkit-scrollbar {
@@ -39,14 +40,35 @@
   }
 }
 
-/* Custom Utilities */
-.scanline::after {
-  content: '';
-  @apply absolute top-0 left-0 w-full h-full pointer-events-none;
-  background: linear-gradient(to bottom, transparent 0%, rgba(59, 130, 246, 0.1) 50%, transparent 100%);
-  animation: scanline 3s linear infinite;
+/* Base Animations */
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
 }
 
+.animate-shimmer {
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-scroll {
+  animation: scroll 40s linear infinite;
+}
+
+@keyframes fade-in-up {
+  0% { opacity: 0; transform: translateY(20px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.8s ease-out forwards;
+}
+
+/* Custom Scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
 }
@@ -54,5 +76,9 @@
   @apply bg-[#020617];
 }
 ::-webkit-scrollbar-thumb {
-  @apply bg-slate-700 rounded;
+  @apply bg-slate-800 rounded;
+  border: 2px solid #020617;
+}
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-slate-700;
 }

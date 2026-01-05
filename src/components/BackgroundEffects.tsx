@@ -54,7 +54,7 @@ const BackgroundEffects: React.FC = () => {
         float field = 1e10;
         for(int i = 0; i < 4; i++) {
             float d = length(uv - uBlobs[i].xy) - uBlobs[i].z;
-            field = smin(field, d, 0.4); // Tightening the k-factor for sharper blending
+            field = smin(field, d, 0.1); // Tightening the k-factor for sharper blending
         }
 
         // Razor sharp thresholding
@@ -164,7 +164,7 @@ const BackgroundEffects: React.FC = () => {
       <div ref={containerRef} className="absolute inset-0 z-0" />
       
       {/* Refraction & Glass (Tightened blur for sharpness) */}
-      <div className="absolute inset-0 backdrop-blur-2xl bg-slate-950/20 z-10" />
+      <div className="absolute inset-0 backdrop-blur-sm bg-slate-950/20 z-10" />
 
       {/* Technical Grid Overlay */}
       <div className="absolute inset-0 bg-grid opacity-20 z-20" />
