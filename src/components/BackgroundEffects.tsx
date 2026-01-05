@@ -6,9 +6,9 @@ const BackgroundEffects: React.FC = () => {
     <div className="fixed inset-0 z-0 pointer-events-none bg-[#020617]">
       {/* Layer 1: Base Vibrant Blobs (The "Engine" of the colors) */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute -top-24 -left-24 w-125 h-125 bg-blue-600 rounded-full mix-blend-screen filter blur-[100px] opacity-20 animate-blob"></div>
-        <div className="absolute top-1/4 -right-24 w-150 h-150 bg-indigo-600 rounded-full mix-blend-screen filter blur-[120px] opacity-15 animate-blob [animation-delay:3s]"></div>
-        <div className="absolute -bottom-48 left-1/4 w-175 h-175 bg-cyan-600 rounded-full mix-blend-screen filter blur-[140px] opacity-10 animate-blob [animation-delay:6s]"></div>
+        <div className="absolute -top-24 -left-24 w-125 h-125 bg-blue-600 rounded-full mix-blend-screen filter blur-[100px] opacity-30 animate-blob"></div>
+        <div className="absolute top-1/4 -right-24 w-150 h-150 bg-indigo-600 rounded-full mix-blend-screen filter blur-[120px] opacity-45 animate-blob [animation-delay:3s]"></div>
+        <div className="absolute -bottom-48 left-1/4 w-175 h-175 bg-cyan-600 rounded-full mix-blend-screen filter blur-[140px] opacity-60 animate-blob [animation-delay:6s]"></div>
       </div>
 
       {/* Layer 2: The Liquid Glass Surface */}

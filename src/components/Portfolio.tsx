@@ -48,8 +48,8 @@ const Portfolio: React.FC = () => {
     <section id="work" className="py-24 border-t border-white/5 bg-slate-950">
       <div className="max-w-7xl mx-auto px-6">
         <div className="flex items-end justify-between mb-12">
-          <h2 className="text-3xl font-medium tracking-tighter text-white">Selected Work</h2>
-          <a href="#" className="hidden md:flex items-center gap-2 text-xs text-slate-400 hover:text-white transition-colors">
+          <h2 className="text-3xl font-medium tracking-tighter text-white z-1">Selected Work</h2>
+          <a href="#" className="hidden md:flex items-center gap-2 text-xs text-slate-400 hover:text-white transition-colors z-10">
             View full archive <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14m-7-7l7 7l-7 7"></path></svg>
           </a>
         </div>
