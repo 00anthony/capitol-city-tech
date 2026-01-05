@@ -32,7 +32,8 @@ const BackgroundEffects: React.FC = () => {
     const fragmentShader = `
       uniform float uTime;
       uniform vec2 uResolution;
-      uniform vec4 uSatellites[4]; // x, y, radius, depth/z
+      uniform vec4 uSatellites[5]; // x, y, baseRadius, depthZ
+      uniform vec3 uColors[5];     // Blob primary colors
       varying vec2 vUv;
 
       float smin(float a, float b, float k) {
@@ -41,92 +42,108 @@ const BackgroundEffects: React.FC = () => {
       }
 
       float noise(vec2 p) {
-          return sin(p.x * 6.0 + uTime * 0.1) * cos(p.y * 6.0 - uTime * 0.15);
-      }
-
-      vec3 getAuraColor(float d, vec2 uv, float z) {
-          // Palette shifts slightly based on depth (z)
-          vec3 colorBlue   = vec3(0.05, 0.4, 1.0);
-          vec3 colorGreen  = vec3(0.0, 1.0, 0.7);
-          vec3 colorPurple = vec3(0.7, 0.2, 1.0);
-
-          float shift = uTime * 0.02 + length(uv) * 0.3 + z * 0.2;
-          float m1 = sin(shift) * 0.5 + 0.5;
-          float m2 = cos(shift * 1.2) * 0.5 + 0.5;
-          
-          vec3 col = mix(colorBlue, colorGreen, m1);
-          col = mix(col, colorPurple, m2);
-          return col;
+          return sin(p.x * 4.0 + uTime * 0.05) * cos(p.y * 4.0 - uTime * 0.05);
       }
 
       void main() {
         vec2 uv = (gl_FragCoord.xy * 2.0 - uResolution.xy) / min(uResolution.y, uResolution.x);
         
-        // Tilt the whole coordinate system slightly for 3D perspective feel
-        uv.y += uv.x * 0.1;
+        // Perspective tilt
+        uv.y += uv.x * 0.03;
 
-        // 1. THE MAIN HOLLOW RING (with 3D wobble)
-        float ringZ = sin(uTime * 0.5) * 0.1;
-        float ringRadius = 0.52 + sin(uTime * 0.3) * 0.02;
-        float ringThickness = 0.04;
+        // 1. STABLE PRIMARY RING
+        float ringRadius = 0.55;
+        float ringThickness = 0.03;
         float field = abs(length(uv) - ringRadius) - ringThickness;
 
-        // 2. 3D SATELLITES
-        float totalZ = 0.0;
-        for(int i = 0; i < 4; i++) {
+        vec3 finalColor = vec3(0.0);
+        float totalWeight = 0.0;
+        float totalGlow = 0.0;
+        
+        // Deep base color for the ring
+        float ringWeight = smoothstep(0.25, 0.0, field);
+        finalColor += vec3(0.02, 0.05, 0.15) * ringWeight;
+        totalWeight += ringWeight;
+
+        for(int i = 0; i < 5; i++) {
             vec3 pos = uSatellites[i].xyz;
-            float z = uSatellites[i].w; // depth value from JS
+            float z = uSatellites[i].w; 
             
-            // Adjust local radius based on depth (z)
-            // Foreground (+z) is larger and sharper, Background (-z) is smaller and blurrier
-            float localR = pos.z * (1.0 + z * 0.4);
-            float d = length(uv - pos.xy) - localR;
+            // Tangential Flattening
+            float distToCenter = length(uv);
+            vec2 dir = normalize(uv);
+            float radialDiff = abs(distToCenter - ringRadius);
+            float stretch = 1.0 + smoothstep(0.25, 0.0, radialDiff) * 3.5;
             
-            // Liquid merge: The blending factor 'k' is modulated by depth
-            // This makes front-passing blobs "pinch" the ring more visibly
-            float k = 0.2 + (z + 1.0) * 0.1;
-            field = smin(field, d, k);
+            vec2 satellitePos = pos.xy;
+            vec2 delta = uv - satellitePos;
+            vec2 tangent = vec2(-dir.y, dir.x);
+            float tDist = dot(delta, tangent);
+            float nDist = dot(delta, dir);
             
-            // Accumulate z for color modulation
-            totalZ += z * smoothstep(0.4, 0.0, d);
+            // Adjusted local radius with depth scaling
+            float currentRadius = pos.z * (1.0 + z * 0.35);
+            float localD = length(vec2(tDist / stretch, nDist)) - currentRadius;
+            
+            // Liquid merge logic
+            float k = 0.28 + (z + 1.0) * 0.12;
+            field = smin(field, localD, k);
+            
+            // --- DYNAMIC GRADIENT COLORING ---
+            // Calculate a local gradient for the blob based on its position
+            float colorGradient = dot(normalize(delta + 0.1), vec2(0.707, 0.707)) * 0.5 + 0.5;
+            vec3 blobColor = mix(uColors[i], uColors[(i+1)%5], colorGradient * 0.6);
+            
+            float weight = smoothstep(0.45, -0.15, localD);
+            finalColor += blobColor * weight * (1.1 + z * 0.3);
+            totalWeight += weight;
+
+            // --- RIBBON GLOW / ACCENT LOGIC ---
+            // Create a very thin shell around the blob's perimeter
+            float shell = abs(localD + 0.01) - 0.004;
+            float glowPulse = sin(uTime * 0.8 + float(i) * 1.5) * 0.5 + 0.5;
+            // Only trigger glow occasionally or for the 'ghost' blob (index 4)
+            float intensity = (i == 4) ? 0.8 : (glowPulse * 0.4 * smoothstep(0.7, 1.0, glowPulse));
+            float shellGlow = smoothstep(0.02, 0.0, shell) * intensity;
+            
+            // Cyan-blue accent for the ribbon
+            vec3 ribbonColor = vec3(0.0, 0.7, 1.0);
+            finalColor += ribbonColor * shellGlow * 2.0;
+            totalGlow += shellGlow;
         }
 
-        // --- WHISPY ETHER RENDERING ---
-        float n = noise(uv * 1.5) * 0.12;
-        
-        // Wide falloff for the whispy vapor
-        float alphaBase = smoothstep(0.5 + n, -0.2, field);
-        
-        // Interior fluid "whisps"
-        float whisps = sin(field * 12.0 - uTime * 0.3) * 0.5 + 0.5;
-        whisps *= smoothstep(0.4, 0.0, field);
+        // --- FINAL COMPOSITION ---
+        float n = noise(uv * 1.4) * 0.18;
+        float alphaBase = smoothstep(0.65 + n, -0.25, field);
+        float interiorWhisps = sin(field * 11.0 - uTime * 0.25) * 0.5 + 0.5;
+        interiorWhisps *= smoothstep(0.4, 0.0, field);
 
-        vec3 color = getAuraColor(field, uv, totalZ);
+        if(totalWeight > 0.0) finalColor /= (totalWeight + 0.1);
+
+        float borderHighlight = smoothstep(0.09, 0.0, abs(field)) * 0.8;
         
-        // Apply depth-based darkening
-        float depthDim = smoothstep(-1.5, 1.0, totalZ);
-        color *= (0.8 + depthDim * 0.2);
+        vec3 col = finalColor + (borderHighlight * finalColor * 0.6) + (totalGlow * vec3(0.4, 0.8, 1.0));
+        float alpha = (alphaBase * 0.25 + borderHighlight * 0.8 + interiorWhisps * 0.12 + totalGlow * 0.5);
 
-        // Alpha calculation
-        float borderGlow = smoothstep(0.06, 0.0, abs(field)) * 0.6;
-        float finalAlpha = (alphaBase * 0.4 + whisps * 0.15 + borderGlow);
-
-        gl_FragColor = vec4(color + (borderGlow * 0.3), finalAlpha * 0.6);
+        gl_FragColor = vec4(col, alpha * 0.7);
       }
     `;
 
-    // Satellite state with 3D pathing parameters
+    // Satellite state with slower speeds and individual 3D axes
     const satellites = [
-      { progress: 0.0, speed: 0.003, rx: 0.6, ry: 0.4, rz: 0.5, phase: 0 },
-      { progress: 0.25, speed: 0.002, rx: 0.5, ry: 0.6, rz: 0.4, phase: 2 },
-      { progress: 0.5, speed: 0.004, rx: 0.7, ry: 0.3, rz: 0.6, phase: 4 },
-      { progress: 0.75, speed: 0.0025, rx: 0.4, ry: 0.7, rz: 0.3, phase: 5.5 }
+      { progress: 0.0, speed: 0.0008, rx: 0.6, ry: 0.4, rz: 0.5, color: new THREE.Vector3(0.1, 0.4, 1.0), axis: new THREE.Vector3(1, 0.5, 0.2).normalize() },
+      { progress: 0.2, speed: 0.0006, rx: 0.4, ry: 0.6, rz: 0.4, color: new THREE.Vector3(0.0, 1.0, 0.6), axis: new THREE.Vector3(0.2, 1, 0.5).normalize() },
+      { progress: 0.4, speed: 0.0011, rx: 0.7, ry: 0.3, rz: 0.6, color: new THREE.Vector3(0.6, 0.2, 0.9), axis: new THREE.Vector3(0.5, 0.2, 1).normalize() },
+      { progress: 0.6, speed: 0.0007, rx: 0.5, ry: 0.7, rz: 0.3, color: new THREE.Vector3(0.1, 0.8, 0.8), axis: new THREE.Vector3(1, -0.5, 1).normalize() },
+      // Index 4 is our "Ghost Ribbon" blob
+      { progress: 0.8, speed: 0.0009, rx: 0.55, ry: 0.55, rz: 0.7, color: new THREE.Vector3(0.0, 0.5, 1.0), axis: new THREE.Vector3(-1, 1, 0.5).normalize() }
     ];
 
     const uniforms = {
       uTime: { value: 0 },
       uResolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) },
-      uSatellites: { value: satellites.map(() => new THREE.Vector4(0, 0, 0, 0)) }
+      uSatellites: { value: satellites.map(() => new THREE.Vector4(0, 0, 0, 0)) },
+      uColors: { value: satellites.map(s => s.color) }
     };
 
     const geometry = new THREE.PlaneGeometry(2, 2);
@@ -149,21 +166,21 @@ const BackgroundEffects: React.FC = () => {
       
       satellites.forEach((s, i) => {
         s.progress += s.speed;
+        const t = s.progress * Math.PI * 2;
+
+        // Figure-8 logic in 3D
+        let x = Math.sin(t) * s.rx;
+        let y = Math.sin(t * 2.0) * s.ry;
+        let z = Math.cos(t) * s.rz;
+
+        // Triple-axis tumbling
+        const rotationSpeed = 0.08;
+        const q = new THREE.Quaternion().setFromAxisAngle(s.axis, time * rotationSpeed);
+        const v = new THREE.Vector3(x, y, z).applyQuaternion(q);
         
-        // 3D Infinity Path (Lemniscate projection with Z depth)
-        const t = s.progress * Math.PI * 2 + s.phase;
-        
-        // Using a modified 3D figure-8 loop
-        // Blobs pass through (0,0,0) and swing out to the edges
-        const x = Math.sin(t) * s.rx;
-        const y = Math.sin(t * 2.0) * s.ry;
-        const z = Math.cos(t) * s.rz; 
-        
-        // Base radius of the satellite
-        const baseR = 0.12 + Math.sin(time * 0.5 + i) * 0.03;
-        
-        // Update the Vector4: [x, y, baseRadius, depthZ]
-        uniforms.uSatellites.value[i].set(x, y, baseR, z);
+        // Base radius fluctuates slightly
+        const baseR = 0.12 + Math.sin(time * 0.3 + i) * 0.02;
+        uniforms.uSatellites.value[i].set(v.x, v.y, baseR, v.z);
       });
 
       renderer.render(scene, camera);
@@ -189,13 +206,13 @@ const BackgroundEffects: React.FC = () => {
     <div className="fixed inset-0 pointer-events-none -z-10 bg-[#020617] overflow-hidden">
       <div ref={containerRef} className="absolute inset-0 z-0" />
       
-      {/* Heavy Blur creates the 3D vaporous depth */}
-      <div className="absolute inset-0  bg-slate-950/20 z-10" />
+      {/* Diffuse blurring for the vapor look */}
+      <div className="absolute inset-0  bg-slate-950/25 z-10" />
 
-      {/* Grid Overlay for technical grounding */}
-      <div className="absolute inset-0 bg-grid opacity-[0.06] z-20" />
+      {/* Grounding Grid */}
+      <div className="absolute inset-0 bg-grid opacity-[0.04] z-20" />
       
-      {/* Noise Grain */}
+      {/* Noise Grain Overlay */}
       <div 
         className="absolute inset-0 opacity-[0.012] z-30 mix-blend-overlay" 
         style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")` }} 
