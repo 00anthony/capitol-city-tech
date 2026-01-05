@@ -2,8 +2,12 @@
 @tailwind utilities;
 
 @layer base {
+  html {
+    scroll-behavior: smooth;
+  }
   body {
     @apply bg-[#020617] text-slate-300 antialiased selection:bg-blue-500/30 selection:text-blue-100;
+    min-height: 100vh;
   }
 }
 

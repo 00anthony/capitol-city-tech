@@ -13,6 +13,16 @@ module.exports = {
         sans: ['Inter', 'sans-serif'],
       },
       animation: {
+        "glass-flow": "glassFlow 18s ease-in-out infinite",
+      },
+      keyframes: {
+        glassFlow: {
+          "0%": { backgroundPosition: "0% 50%" },
+          "50%": { backgroundPosition: "100% 50%" },
+          "100%": { backgroundPosition: "0% 50%" },
+        },
+      },
+      animation: {
         'blob': 'blob 10s infinite',
         'liquid': 'liquid 20s ease-in-out infinite',
         'shimmer': 'shimmer 1.5s infinite',

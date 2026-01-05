@@ -19,7 +19,6 @@ const Hero: React.FC = () => {
           </span>
           Accepting New Clients for Q4
         </div>
-
         <h1 className="text-4xl md:text-6xl lg:text-7xl font-medium tracking-tighter text-transparent bg-clip-text bg-linear-to-b from-white via-white to-slate-500 mb-6 leading-[1.1]">
           Manage projects <br className="hidden md:block" />
           at the speed of <span className="text-blue-400 text-glow">thought.</span>
