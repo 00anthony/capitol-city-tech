@@ -137,7 +137,7 @@ const BackgroundEffects: React.FC = () => {
             // Ghost blob (index 4) has slightly higher visibility
             if (i == 4) intensity *= 1.2;
 
-            float shellGlow = smoothstep(0.018, 0.0, shell) * intensity;
+            float shellGlow = smoothstep(0.03, 0.0, shell) * intensity;
             
             // Cyan/Ice-blue glow accent
             vec3 glowCol = vec3(0.0, 0.6, 1.0);
@@ -238,11 +238,11 @@ const BackgroundEffects: React.FC = () => {
       <div className="absolute inset-0  bg-slate-950/35 z-10" />
 
       {/* Grid structure overlay */}
-      <div className="absolute inset-0 bg-grid opacity-[0.025] z-20" />
+      <div className="absolute inset-0 bg-grid opacity-[0.15] z-20" />
       
       {/* Noise texture for organic depth */}
       <div 
-        className="absolute inset-0 opacity-[0.012] z-30 mix-blend-overlay" 
+        className="absolute inset-0 opacity-[0.0] z-30 mix-blend-overlay" 
         style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")` }} 
       />
     </div>
