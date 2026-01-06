@@ -34,7 +34,9 @@ const BackgroundEffects: React.FC = () => {
       uniform vec2 uResolution;
       uniform vec4 uSatellites[5]; // x, y, baseRadius, depthZ
       uniform vec3 uColors[5];     // Primary colors
+      uniform float uYOffset;
       varying vec2 vUv;
+      
 
       float smin(float a, float b, float k) {
           float h = max(k - abs(a - b), 0.0) / k;
@@ -51,6 +53,8 @@ const BackgroundEffects: React.FC = () => {
 
       void main() {
         vec2 uv = (gl_FragCoord.xy * 2.0 - uResolution.xy) / min(uResolution.y, uResolution.x);
+        uv.y += uYOffset;
+
         
         // Subtle tilt
         uv.y += uv.x * 0.015;
@@ -154,6 +158,8 @@ const BackgroundEffects: React.FC = () => {
         if(totalWeight > 0.0) finalColor /= (totalWeight + 0.05);
 
         float edgeHighlight = smoothstep(0.08, 0.0, abs(field)) * 0.9;
+
+        
         
         vec3 col = finalColor + (edgeHighlight * finalColor * 0.5) + (totalGlow * vec3(0.4, 0.8, 1.0));
         float alpha = (alphaBase * 0.2 + edgeHighlight * 0.95 + whisps * 0.06 + totalGlow * 0.8);
@@ -170,9 +176,12 @@ const BackgroundEffects: React.FC = () => {
       { progress: 0.8, speed: 0.00045, rx: 0.58, ry: 0.58, rz: 0.7, color: new THREE.Vector3(0.0, 0.6, 1.0), axis: new THREE.Vector3(-0.6, 0.8, 0.4).normalize() }
     ];
 
+    const isMobile = window.matchMedia('(max-width: 768px)').matches;
+
     const uniforms = {
       uTime: { value: 0 },
       uResolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) },
+      uYOffset: { value: isMobile ? 0.45 : 0.0 },
       uSatellites: { value: satellites.map(() => new THREE.Vector4(0, 0, 0, 0)) },
       uColors: { value: satellites.map(s => s.color) }
     };
@@ -240,7 +249,10 @@ const BackgroundEffects: React.FC = () => {
       {/* Grid structure overlay */}
       <div className="absolute inset-0 bg-grid opacity-[0.15] z-20" />
       
-      {/* Noise texture for organic depth */}
+      {/* Noise texture for organic depth and light circles*/}
+      <div className="z-30 absolute top-0 -left-4 w-72 h-72 bg-blue-500 rounded-full mix-blend-screen filter blur-3xl opacity-15 sm:opacity-15 sm:animate-blob"></div>
+      <div className="z-30 absolute top-0 -right-4 w-72 h-72 bg-indigo-500 rounded-full mix-blend-screen filter blur-3xl opacity-5 sm:opacity-20 sm:animate-blob [animation-delay:2s]"></div>
+      <div className="z-30 absolute -bottom-8 left-20 w-72 h-72 bg-cyan-500 rounded-full mix-blend-screen filter blur-3xl opacity-20 sm:opacity-25 sm:animate-blob [animation-delay:4s]"></div>
       <div 
         className="absolute inset-0 opacity-[0.0] z-30 mix-blend-overlay" 
         style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")` }} 
