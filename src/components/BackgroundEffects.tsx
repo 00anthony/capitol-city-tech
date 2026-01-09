@@ -170,7 +170,7 @@ const BackgroundEffects: React.FC = () => {
 
     const satellites = [
       { progress: 0.0, speed: 0.00035, rx: 0.65, ry: 0.45, rz: 0.5, color: new THREE.Vector3(0.1, 0.5, 1.0), axis: new THREE.Vector3(1, 0.4, 0.3).normalize() },
-      { progress: 0.2, speed: 0.00025, rx: 0.45, ry: 0.65, rz: 0.4, color: new THREE.Vector3(0.1, 1.0, 0.6), axis: new THREE.Vector3(0.3, 1, 0.4).normalize() },
+      { progress: 0.2, speed: 0.00025, rx: 0.45, ry: 0.65, rz: 0.4, color: new THREE.Vector3(0.6, 0.5, 1.0), axis: new THREE.Vector3(0, 1, 1).normalize() },  // Soft Lavender
       { progress: 0.4, speed: 0.0006, rx: 0.7, ry: 0.35, rz: 0.6, color: new THREE.Vector3(0.7, 0.3, 1.0), axis: new THREE.Vector3(0.4, 0.2, 1).normalize() },
       { progress: 0.6, speed: 0.0003, rx: 0.5, ry: 0.75, rz: 0.3, color: new THREE.Vector3(0.2, 0.9, 0.9), axis: new THREE.Vector3(1, -0.4, 0.6).normalize() },
       { progress: 0.8, speed: 0.00045, rx: 0.58, ry: 0.58, rz: 0.7, color: new THREE.Vector3(0.0, 0.6, 1.0), axis: new THREE.Vector3(-0.6, 0.8, 0.4).normalize() }
