@@ -14,7 +14,7 @@ import BackgroundEffects from '../components/BackgroundEffects';
 const Page: React.FC = () => {
   return (
     <div className="relative">
-      <BackgroundEffects />
+      {/*<BackgroundEffects /> commented out for build performance*/}
       <Navbar />
       <main>
         <Hero />
