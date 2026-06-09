@@ -1,35 +1,127 @@
+'use client'
+import Image from 'next/image';
+import React, { useState, useEffect } from 'react';
 
-import React from 'react';
+const NAV_LINKS = [
+  { label: 'Process',   href: '#process'   },
+  { label: 'Services',  href: '#services'  },
+  { label: 'Portfolio', href: '#work'       },
+  { label: 'About',     href: '#about'      },
+  { label: 'FAQ',       href: '#faq'        },
+];
 
 const Navbar: React.FC = () => {
-  return (
-    <nav className="fixed top-0 w-full z-50 border-b border-white/5 glass-panel">
-      <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <div className="w-8 h-8 bg-linear-to-br from-blue-500 to-indigo-600 rounded-lg flex items-center justify-center text-white shadow-lg shadow-blue-500/20">
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"></path></svg>
-          </div>
-          <span className="text-sm font-medium tracking-tight text-white">Capitol City Tech</span>
-        </div>
-        
-        <div className="hidden md:flex items-center gap-8 text-xs font-medium text-slate-400">
-          <a href="#process" className="hover:text-blue-400 transition-colors">Process</a>
-          <a href="#services" className="hover:text-blue-400 transition-colors">Services</a>
-          <a href="#work" className="hover:text-blue-400 transition-colors">Portfolio</a>
-          <a href="#about" className="hover:text-blue-400 transition-colors">About</a>
-          <a href="#faq" className="hover:text-blue-400 transition-colors">FAQ</a>
-        </div>
+  const [isOpen, setIsOpen] = useState(false);
 
-        <div className="flex items-center gap-4">
-          <button className="hidden md:flex items-center gap-2 text-xs font-medium text-slate-300 hover:text-white transition-colors">
-            Sign In
-          </button>
-          <button className="bg-white text-black text-xs font-medium px-4 py-2 rounded-full hover:bg-slate-200 transition-all shadow-[0_0_15px_-3px_rgba(255,255,255,0.3)]">
-            Start Project
-          </button>
+  /* Lock / unlock body scroll when mobile menu opens */
+  useEffect(() => {
+    document.body.style.overflow = isOpen ? 'hidden' : '';
+    return () => { document.body.style.overflow = ''; };
+  }, [isOpen]);
+
+  const close = () => setIsOpen(false);
+
+  return (
+    <>
+      <nav className="fixed top-0 w-full z-50 border-b border-white/5 glass-panel backdrop-blur-lg">
+        <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+
+          {/* Logo */}
+          <div className="flex items-center gap-2">
+            <Image
+                src="/logo-white.png"
+                alt='logo'
+                height={50}
+                width={50}
+                className='mb-2'
+              />
+            <span className="text-sm font-medium tracking-tight text-white">Capitol City Tech</span>
+          </div>
+
+          {/* Desktop links */}
+          <div className="hidden md:flex items-center gap-8 text-xs font-medium text-slate-400">
+            {NAV_LINKS.map(({ label, href }) => (
+              <a key={href} href={href} className="hover:text-blue-400 transition-colors">{label}</a>
+            ))}
+          </div>
+
+          {/* Desktop CTA */}
+          <div className="hidden md:flex items-center gap-4">
+            <button className="text-xs font-medium text-slate-300 hover:text-white transition-colors">
+              Sign In
+            </button>
+            <button className="bg-white text-black text-xs font-medium px-4 py-2 rounded-full hover:bg-slate-200 transition-all shadow-[0_0_15px_-3px_rgba(255,255,255,0.3)]">
+              Start Project
+            </button>
+          </div>
+
+          {/* Mobile: CTA + hamburger */}
+          <div className="flex md:hidden items-center gap-3">
+            
+
+            {/* Animated hamburger → X */}
+            <button
+              onClick={() => setIsOpen(prev => !prev)}
+              aria-label={isOpen ? 'Close menu' : 'Open menu'}
+              aria-expanded={isOpen}
+              className="relative w-8 h-8 flex flex-col items-center justify-center gap-[5px] focus:outline-none"
+            >
+              {/* Top bar: translates down + rotates to form the top arm of X */}
+              <span className={`block h-px w-5 bg-white origin-center transition-all duration-300 ease-in-out
+                ${isOpen ? 'translate-y-[6px] rotate-45' : ''}`}
+              />
+              {/* Middle bar: fades out */}
+              <span className={`block h-px w-5 bg-white transition-all duration-200 ease-in-out
+                ${isOpen ? 'opacity-0 scale-x-0' : ''}`}
+              />
+              {/* Bottom bar: translates up + rotates to form the bottom arm of X */}
+              <span className={`block h-px w-5 bg-white origin-center transition-all duration-300 ease-in-out
+                ${isOpen ? '-translate-y-[6px] -rotate-45' : ''}`}
+              />
+            </button>
+          </div>
+
+        </div>
+      </nav>
+
+      {/* ── Mobile menu overlay ── */}
+      {/* Backdrop */}
+      <div
+        onClick={close}
+        className={`fixed inset-0 z-40 bg-slate-950/60 backdrop-blur-sm md:hidden transition-opacity duration-300
+          ${isOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
+        aria-hidden="true"
+      />
+
+      {/* Slide-down panel */}
+      <div
+        className={`fixed top-16 left-0 right-0 z-40 md:hidden border-b border-white/5 glass-panel backdrop-blur-lg
+          transition-all duration-300 ease-in-out overflow-hidden
+          ${isOpen ? 'max-h-screen opacity-100' : 'max-h-0 opacity-0'}`}
+      >
+        <div className="max-w-7xl mx-auto px-6 py-6 flex flex-col gap-1">
+          {NAV_LINKS.map(({ label, href }) => (
+            <a
+              key={href}
+              href={href}
+              onClick={close}
+              className="text-sm font-medium text-slate-300 hover:text-white hover:bg-white/5 px-3 py-3 rounded-lg transition-all"
+            >
+              {label}
+            </a>
+          ))}
+
+          <div className="mt-4 pt-4 border-t border-white/5 flex flex-col gap-3">
+            <button className="text-sm font-medium text-slate-300 hover:text-white px-3 py-3 text-left transition-colors">
+              Sign In
+            </button>
+            <button className="bg-white text-black text-sm font-medium px-4 py-3 rounded-full hover:bg-slate-200 transition-all shadow-[0_0_15px_-3px_rgba(255,255,255,0.3)]">
+              Start Project
+            </button>
+          </div>
         </div>
       </div>
-    </nav>
+    </>
   );
 };
 
