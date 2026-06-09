@@ -1,5 +1,6 @@
 'use client'
 import React, { useState } from 'react';
+import Image from 'next/image';
 import ConsultationForm from './ConsultationForm';
 
 interface Client {
@@ -73,7 +74,7 @@ const DashboardMockup: React.FC = () => {
       status: 'Active',
       progress: 90,
       description: 'Luxury skincare brand specializing in moisturizers.',
-      logoUrl: '/dashboard-cards/luvera-headshot.webp',
+      logoUrl: '/dashboard-cards/luvera-icon.png',
       heroImage: '/dashboard-cards/luvera-hero.png',
       heroOpacity: 0.18,
       link: 'https://useluvera.com',
@@ -125,7 +126,7 @@ const DashboardMockup: React.FC = () => {
       status: 'Pending',
       progress: 25,
       description: 'Expert financial advising in the restaurant industry.',
-      logoUrl: '/dashboard-cards/mastodon-headshot.webp',
+      logoUrl: '/dashboard-cards/mastodon-hero.jpg',
       heroImage: '/dashboard-cards/mastodon-hero.jpg',
       heroOpacity: 0.1,
       // link: 'https://mastodonventures.com',
@@ -312,7 +313,7 @@ const DashboardMockup: React.FC = () => {
   ];
 
   return (
-    <div className="relative max-w-6xl mx-auto transform hover:scale-[1.002] transition-transform duration-700">
+    <div className="relative max-w-6xl mx-auto transform  transition-transform duration-700">
       <ConsultationForm isOpen={isFormOpen} onClose={() => setIsFormOpen(false)} />
 
       {/* Client Directory Modal */}
@@ -344,20 +345,22 @@ const DashboardMockup: React.FC = () => {
             <div className="w-3 h-3 rounded-full bg-yellow-500/70"></div>
             <div className="w-3 h-3 rounded-full bg-green-500/70"></div>
           </div>
-          <div className="flex-1 text-center text-[10px] text-slate-500 font-medium">CapitolCityTech.workflow</div>
+          <div className="flex-1 text-center text-[10px] text-slate-500 font-medium">CapitolCity.Tech/workflow</div>
           <div className="w-20"></div>
         </div>
 
         <div className="flex flex-1 overflow-hidden">
           {/* ── Sidebar ── */}
           <div className="w-64 border-r border-white/5 bg-white/2 backdrop-blur-md hidden lg:flex flex-col p-6 shrink-0">
-            <div className="flex items-center gap-2 mb-10 text-white font-medium">
-              <div className="w-6 h-6 rounded bg-linear-to-tr from-blue-400 to-indigo-500 flex items-center justify-center">
-                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-white">
-                  <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
-                </svg>
-              </div>
-              <span className="text-xs">capitol_city</span>
+            <div className="flex items-center gap-2 mb-10 -mt-2 text-white font-medium">
+              <Image
+                src="/logo-white.png"
+                alt='logo'
+                height={50}
+                width={40}
+                className='mb-2'
+              />
+              <span className="text-xs">Capitol City Tech</span>
             </div>
 
             <div className="space-y-1">
@@ -406,7 +409,7 @@ const DashboardMockup: React.FC = () => {
             <div className="mt-auto pt-6 border-t border-white/5 flex items-center gap-3">
               <div className="w-8 h-8 rounded-full overflow-hidden bg-slate-800"><UserSilhouette /></div>
               <div className="flex flex-col text-[10px]">
-                <span className="text-white font-medium">Project Admin</span>
+                <span className="text-white font-medium">Guest Admin</span>
                 <span className="text-slate-500 uppercase">CCT_INTERNAL</span>
               </div>
             </div>
@@ -441,8 +444,9 @@ const DashboardMockup: React.FC = () => {
                 <button
                   onClick={() => setIsFormOpen(true)}
                   aria-label="start your project"
-                  className="flex items-center justify-center bg-blue-600 hover:bg-blue-500 text-white w-9 h-9 rounded-lg transition-all shadow-lg active:scale-90"
+                  className="flex items-center justify-center bg-blue-600 hover:bg-blue-500 text-white w-9 h-9 rounded-lg transition-all shadow-lg active:scale-90 cursor-pointer"
                 >
+                  
                   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M12 5v14M5 12h14"></path>
                   </svg>
