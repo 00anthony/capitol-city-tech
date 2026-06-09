@@ -27,14 +27,17 @@ const Navbar: React.FC = () => {
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
 
           {/* Logo */}
-          <div className="flex items-center gap-2">
-            <Image
+          <div className="flex items-center gap-2 ">
+            <div className="w-12 h-12 bg-linear-to-tl from-blue-500/20 to-indigo-600/10 rounded-lg flex items-center justify-center text-white shadow-lg shadow-blue-500/20">
+              <Image
                 src="/logo-white.png"
                 alt='logo'
                 height={50}
                 width={50}
                 className='mb-2'
               />
+            </div>
+            
             <span className="text-sm font-medium tracking-tight text-white">Capitol City Tech</span>
           </div>
 
