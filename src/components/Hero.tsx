@@ -19,13 +19,13 @@ const Hero: React.FC = () => {
           </span>
           Accepting New Clients for Q4
         </div>
-        <h1 className="overflow-visible text-4xl md:text-6xl lg:text-7xl font-medium tracking-tighter text-transparent bg-clip-text bg-linear-to-b from-white via-white to-slate-500 mb-6 leading-[1.1]">
+        <h1 className="overflow-visible text-4xl md:text-6xl lg:text-7xl font-medium tracking-tighter text-transparent bg-clip-text bg-linear-to-b from-white via-white to-slate-500 mb-4 pb-2 leading-[1.1]">
           Digital experiences <br className="hidden md:block" />
           engineered for <span className="text-blue-400 text-glow">growth.</span>
         </h1>
 
         <p className="text-sm md:text-base text-slate-400 max-w-2xl mx-auto mb-10 leading-relaxed font-light">
-          We don't just build software; we build the engine that drives your business. Experience real-time collaboration and transparency.
+          We don't just build websites, we build the engine that drives your business. Experience real-time collaboration and transparency.
         </p>
 
         <div className="flex flex-col sm:flex-row gap-4 items-center justify-center mb-20">
@@ -36,7 +36,7 @@ const Hero: React.FC = () => {
           </button>
           <button className="px-6 py-3 bg-slate-900 border border-slate-800 text-slate-300 text-sm font-medium rounded-lg hover:border-slate-600 transition-all flex items-center gap-2">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-slate-500"><path d="M9 9.003a1 1 0 0 1 1.517-.859l4.997 2.997a1 1 0 0 1 0 1.718l-4.997 2.997A1 1 0 0 1 9 14.996z"></path><circle cx="12" cy="12" r="10"></circle></svg>
-            View Showreel
+            View Our Work 
           </button>
         </div>
 

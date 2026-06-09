@@ -161,7 +161,7 @@ const DashboardMockup: React.FC = () => {
     return (
       <div
         key={client.id}
-        className={`relative overflow-hidden bg-white/5 backdrop-blur-md rounded-xl border border-white/5
+        className={`relative overflow-hidden bg-black/10 rounded-xl border border-white/5
           hover:border-white/20 hover:bg-white/[0.07] transition-all group cursor-pointer
           ${condensed ? 'flex items-center gap-4 p-4' : 'flex flex-col p-4'}`}
         onClick={() => {
@@ -237,7 +237,7 @@ const DashboardMockup: React.FC = () => {
   };
 
   const renderCard = (card: any) => (
-    <div key={card.id} className="bg-white/5 backdrop-blur-sm p-4 rounded-xl border border-white/5 hover:border-white/20 transition-all group cursor-pointer shadow-lg shadow-black/20 block hover:bg-white/[0.07]">
+    <div key={card.id} className="bg-white/5  p-4 rounded-xl border border-white/5 hover:border-white/20 transition-all group cursor-pointer shadow-lg shadow-black/20 block hover:bg-white/[0.07]">
       {card.img && <div className="w-full h-24 rounded-lg bg-slate-800/50 mb-3 overflow-hidden opacity-80 group-hover:opacity-100 transition-opacity"><img src={card.img} className="w-full h-full object-cover" alt={card.title} /></div>}
       {card.gradient && <div className={`w-full h-16 rounded-lg bg-linear-to-r ${card.gradient} mb-3 opacity-60 group-hover:opacity-80 transition-opacity`}></div>}
       <h3 className="text-xs font-semibold text-slate-200 mb-1">{card.title}</h3>
