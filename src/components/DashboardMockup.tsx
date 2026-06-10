@@ -243,7 +243,7 @@ const DashboardMockup: React.FC = () => {
       {card.gradient && <div className={`w-full h-16 rounded-lg bg-linear-to-r ${card.gradient} mb-3 opacity-60 group-hover:opacity-80 transition-opacity`}></div>}
       <h3 className="text-xs font-semibold text-slate-200 mb-1">{card.title}</h3>
       <p className="text-[10px] text-slate-400 mb-4 leading-relaxed line-clamp-2">{card.desc}</p>
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between ">
         <span className={`px-2 py-0.5 rounded text-[9px] font-medium border ${card.tagColor}`}>{card.tag}</span>
         <div className="w-5 h-5 rounded-full overflow-hidden border border-white/10"><UserSilhouette /></div>
       </div>
@@ -407,8 +407,8 @@ const DashboardMockup: React.FC = () => {
             </div>
 
             <div className="mt-auto pt-6 border-t border-white/5 flex items-center gap-3">
-              <div className="w-8 h-8 rounded-full overflow-hidden bg-slate-800"><UserSilhouette /></div>
-              <div className="flex flex-col text-[10px]">
+              <div className="cursor-not-allowed w-8 h-8 rounded-full overflow-hidden bg-slate-800"><UserSilhouette /></div>
+              <div className="flex flex-col text-[10px] ">
                 <span className="text-white font-medium">Guest Admin</span>
                 <span className="text-slate-500 uppercase">CCT_INTERNAL</span>
               </div>
