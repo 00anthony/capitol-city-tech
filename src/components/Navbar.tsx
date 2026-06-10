@@ -50,7 +50,7 @@ const Navbar: React.FC = () => {
 
           {/* Desktop CTA */}
           <div className="hidden md:flex items-center gap-4">
-            <button className="text-xs font-medium text-slate-300 hover:text-white transition-colors">
+            <button className="cursor-not-allowed text-xs font-medium text-slate-700 transition-colors">
               Sign In
             </button>
             <button className="bg-white text-black text-xs font-medium px-4 py-2 rounded-full hover:bg-slate-200 transition-all shadow-[0_0_15px_-3px_rgba(255,255,255,0.3)]">
