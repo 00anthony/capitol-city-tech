@@ -19,7 +19,8 @@ const Page: React.FC = () => {
       <Navbar />
       <main>
         <Hero />
-        <TechMarquee />
+        {/*<TechMarquee /> commented out for dev performance*/}
+        
         <Process />
         <Services />
         <Portfolio />
