@@ -25,7 +25,8 @@ const Page: React.FC = () => {
         <Process />
         <Services />
         <Portfolio />
-        <About />
+        
+        {/*<About /> commented out for styling / cluttering */}
         <Pricing />
         <FAQ />
       </main>
