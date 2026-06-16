@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Send, Instagram, Twitter, Facebook, } from 'lucide-react';
+import { Instagram, Facebook, } from 'lucide-react';
 
 const Footer: React.FC = () => {
   return (

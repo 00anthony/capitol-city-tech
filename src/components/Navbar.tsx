@@ -1,6 +1,8 @@
 'use client'
 import Image from 'next/image';
 import React, { useState, useEffect } from 'react';
+import { Instagram, Facebook, } from 'lucide-react';
+
 
 const NAV_LINKS = [
   { label: 'Process',   href: '#process'   },
@@ -28,13 +30,13 @@ const Navbar: React.FC = () => {
 
           {/* Logo */}
           <div className="flex items-center gap-2 ">
-            <div className="w-12 h-12 bg-linear-to-tl from-blue-500/20 to-indigo-600/10 rounded-lg flex items-center justify-center text-white shadow-lg shadow-blue-500/20">
+            <div className="w-12 h-12  rounded-lg flex items-center justify-center text-white ">
               <Image
                 src="/logo-white.png"
                 alt='logo'
                 height={50}
                 width={50}
-                className='mb-2'
+                className='mb-2 '
               />
             </div>
             
@@ -98,30 +100,59 @@ const Navbar: React.FC = () => {
 
       {/* Slide-down panel */}
       <div
-        className={`fixed top-16 left-0 right-0 z-40 md:hidden border-b border-white/5 glass-panel backdrop-blur-lg
+        className={` fixed top-16 left-0 right-0 z-40 md:hidden border-b border-white/5 glass-panel backdrop-blur-lg
           transition-all duration-300 ease-in-out overflow-hidden
           ${isOpen ? 'max-h-screen opacity-100' : 'max-h-0 opacity-0'}`}
       >
-        <div className="max-w-7xl mx-auto px-6 py-6 flex flex-col gap-1">
+        <div className="max-w-7xl mx-auto px-6 py-6 flex flex-col items-center gap-1">
           {NAV_LINKS.map(({ label, href }) => (
             <a
               key={href}
               href={href}
               onClick={close}
-              className="text-sm font-medium text-slate-300 hover:text-white hover:bg-white/5 px-3 py-3 rounded-lg transition-all"
+              className="text-sm font-medium text-slate-300 hover:text-white hover:bg-white/5 px-3 py-3 rounded-lg transition-all text-center"
             >
               {label}
             </a>
           ))}
 
-          <div className="mt-4 pt-4 border-t border-white/5 flex flex-col gap-3">
-            <button className="text-sm font-medium text-slate-300 hover:text-white px-3 py-3 text-left transition-colors">
+          <div className="mt-4 pt-4 border-t border-white/5 flex flex-col items-center gap-3 w-full">
+          {/* cta on mobile */}
+            <button className="cursor-not-allowed text-sm font-medium text-slate-700 px-3 py-3 text-center transition-colors ">
               Sign In
             </button>
-            <button className="bg-white text-black text-sm font-medium px-4 py-3 rounded-full hover:bg-slate-200 transition-all shadow-[0_0_15px_-3px_rgba(255,255,255,0.3)]">
+            <a
+              href="#contact"
+              onClick={close}
+              className="bg-white text-black text-sm font-medium px-4 py-3 rounded-full hover:bg-slate-200 transition-all shadow-[0_0_15px_-3px_rgba(255,255,255,0.3)]"
+            >
               Start Project
-            </button>
+            </a>
+
+            {/* social links on mobile */}
+            <div className="flex items-center justify-center gap-4 mt-2">
+              <a
+                href="https://www.instagram.com/capitolcitytech/"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="instagram"
+                className="w-7 h-7 rounded flex items-center justify-center hover:text-blue-400 transition-all"
+              >
+                <Instagram className="w-4 h-4" />
+              </a>
+
+              <a
+                href="https://www.facebook.com/p/Capitol-City-Tech-61553727423033/"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="facebook"
+                className="w-7 h-7 rounded flex items-center justify-center hover:text-blue-400 transition-all"
+              >
+                <Facebook className="w-4 h-4" />
+              </a>
+            </div>
           </div>
+          
         </div>
       </div>
     </>
