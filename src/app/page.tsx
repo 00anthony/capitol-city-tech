@@ -10,6 +10,7 @@ import About from '../components/About';
 import FAQ from '../components/FAQ';
 import Footer from '../components/Footer';
 import BackgroundEffects from '../components/BackgroundEffects';
+import Pricing from '../components/Pricing';
 
 const Page: React.FC = () => {
   return (
@@ -25,6 +26,7 @@ const Page: React.FC = () => {
         <Services />
         <Portfolio />
         <About />
+        <Pricing />
         <FAQ />
       </main>
       <Footer />
