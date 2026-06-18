@@ -82,3 +82,13 @@
 ::-webkit-scrollbar-thumb:hover {
   @apply bg-slate-700;
 }
+
+/* Hide scrollbar but preserve scrolling */
+.scrollbar-hide {
+  -ms-overflow-style: none; /* IE and old Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}

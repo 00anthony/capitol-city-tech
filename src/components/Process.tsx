@@ -182,10 +182,7 @@ const StepVisual: React.FC<{ icon: React.ReactNode; num: string }> = ({ icon, nu
 
 const Process: React.FC = () => {
   const [animated, setAnimated] = useState(false);
-  const [mobileOpen, setMobileOpen] = useState<number | null>(null);
-  const [mobileTab, setMobileTab] = useState(0);
   const sectionRef = useRef<HTMLDivElement>(null);
-  const carouselRef = useRef<HTMLDivElement>(null);
 
   // Trigger stagger animation when section enters viewport
   useEffect(() => {
@@ -204,23 +201,8 @@ const Process: React.FC = () => {
     return () => observer.disconnect();
   }, []);
 
-  const handleMobileTabClick = (idx: number) => {
-    setMobileTab(idx);
-    setMobileOpen(null);
-    if (carouselRef.current) {
-      const cards = carouselRef.current.querySelectorAll<HTMLElement>('[data-card]');
-      cards[idx]?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
-    }
-  };
-
-  useEffect(() => {
-    if (!carouselRef.current) return;
-    const cards = carouselRef.current.querySelectorAll<HTMLElement>('[data-card]');
-    cards[mobileTab]?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
-  }, [mobileTab]);
-
   return (
-    <section id="process" className="py-24 relative z-10 border-b border-white/5 ">
+    <section id="process" className="py-24 relative z-10 border-b border-white/5">
       <div className="max-w-7xl mx-auto px-6">
 
         {/* Header */}
@@ -237,15 +219,37 @@ const Process: React.FC = () => {
         </div>
 
         {/* ── DESKTOP: staggered wave of cards ─────────────────────────── */}
-        <div ref={sectionRef} className="hidden md:block overflow-visible pb-10 -ml-26 px-6">
-          {/* Padding-bottom so the tallest stagger + card doesn't clip */}
+        {/*
+          FIX 1: overflow-x-auto on THIS wrapper so the max-content inner div
+          can scroll horizontally instead of being clipped.
+          FIX 2: removed invalid -ml-26 (not a Tailwind utility).
+        */}
+        <div
+          ref={sectionRef}
+          className="hidden md:block md:-ml-24"
+          style={{
+            
+            // Hide scrollbar cross-browser via inline styles so it's
+            // guaranteed to apply regardless of CSS load order.
+            msOverflowStyle: 'none',
+            scrollbarWidth: 'none',
+            paddingBottom: 10,
+          }}
+        >
+          {/* Suppress webkit scrollbar inline since pseudo-elements
+              can't be set via style prop — a tiny <style> tag handles it */}
+          <style>{`
+            #process-desktop-scroll::-webkit-scrollbar { display: none; }
+          `}</style>
           <div
+            id="process-desktop-scroll"
             style={{
               display: 'flex',
               gap: 10,
               alignItems: 'flex-start',
               minWidth: 'max-content',
-              // Enough vertical room for stagger max (140) + card content
+              // Extra bottom padding so tallest staggered card (140px offset)
+              // + card body doesn't get clipped by overflow.
               paddingBottom: 8,
             }}
           >
@@ -256,7 +260,6 @@ const Process: React.FC = () => {
                   width: 172,
                   flexShrink: 0,
                   marginTop: STAGGER[idx],
-                  // Slide-up + fade entrance, staggered per card
                   opacity: animated ? 1 : 0,
                   transform: animated ? 'translateY(0px)' : 'translateY(32px)',
                   transition: `opacity 0.65s cubic-bezier(0.16,1,0.3,1) ${idx * 105}ms,
@@ -276,20 +279,10 @@ const Process: React.FC = () => {
                   transition-all duration-300
                 "
               >
-                {/* Circular visual */}
                 <StepVisual icon={step.icon} num={step.num} />
-
-                {/* Subtle divider */}
                 <div style={{ height: 1, background: 'rgba(255,255,255,0.04)', margin: '0 14px' }} />
-
-                {/* Text content */}
                 <div className="px-4 pt-3 pb-5">
-                  <h3
-                    className="
-                      text-white text-sm font-medium tracking-tight leading-snug mb-3
-                      group-hover:text-blue-400 transition-colors duration-300
-                    "
-                  >
+                  <h3 className="text-white text-sm font-medium tracking-tight leading-snug mb-3 group-hover:text-blue-400 transition-colors duration-300">
                     {step.title}
                   </h3>
                   <ul className="space-y-1.5">
@@ -309,134 +302,70 @@ const Process: React.FC = () => {
           </div>
         </div>
 
-        {/* ── MOBILE: tabbed carousel ───────────────────────────────────── */}
-        <div className="md:hidden">
-
-          {/* Tab strip */}
-          <div className="flex overflow-x-auto gap-2 pb-4 mb-3 scrollbar-hide">
-            {steps.map((step, idx) => (
-              <button
-                key={step.num}
-                onClick={() => handleMobileTabClick(idx)}
-                className={`
-                  shrink-0 px-3 py-1.5 rounded-lg text-xs font-medium font-mono tracking-wide
-                  transition-all duration-250 border
-                  ${mobileTab === idx
-                    ? 'bg-blue-500/12 border-blue-500/38 text-blue-400'
-                    : 'bg-white/3 border-white/8 text-slate-500 hover:text-slate-300 hover:border-white/14'
-                  }
-                `}
-              >
-                {step.num}
-              </button>
-            ))}
-          </div>
-
-          {/* Carousel */}
+        {/* ── MOBILE: scrollable carousel ───────────────────────────────── */}
+        {/*
+          FIX 3: scrollbar-hide class kept, but also set the three scrollbar-
+          hiding properties inline to guarantee they apply even if the Tailwind
+          plugin class loses the race against a CSS reset or purge.
+        */}
+        <div
+          className="md:hidden"
+          style={{
+            overflowX: 'auto',
+            msOverflowStyle: 'none',
+            scrollbarWidth: 'none',
+            WebkitOverflowScrolling: 'touch',
+            paddingBottom: 8,
+          }}
+        >
+          <style>{`#process-mobile-scroll::-webkit-scrollbar { display: none; }`}</style>
           <div
-            ref={carouselRef}
-            className="flex overflow-x-auto gap-4 snap-x snap-mandatory scrollbar-hide -mx-2 px-2"
-            style={{ scrollSnapType: 'x mandatory' }}
+            id="process-mobile-scroll"
+            className="flex gap-3 w-max px-2"
+            style={{ alignItems: 'flex-start', paddingBottom: 24 }}
           >
-            {steps.map((step, idx) => {
-              const isOpen = mobileOpen === idx;
-              return (
-                <div
-                  key={step.num}
-                  data-card
-                  className="shrink-0 w-full snap-center"
-                >
-                  <div
-                    className="rounded-xl border border-white/5 overflow-hidden transition-all duration-300"
-                    style={{
-                      background: 'rgba(15,23,42,0.40)',
-                      backdropFilter: 'blur(16px)',
-                      WebkitBackdropFilter: 'blur(16px)',
-                    }}
-                  >
-                    {/* Card header */}
-                    <div className="flex items-center gap-3 p-5">
-                      <div
-                        className="flex items-center justify-center w-10 h-10 rounded-full flex-shrink-0"
-                        style={{
-                          background: 'rgba(15,23,42,0.7)',
-                          border: '1px solid rgba(255,255,255,0.09)',
-                        }}
-                      >
-                        <span className="text-[10px] font-mono font-bold text-blue-400">
-                          {step.num}
-                        </span>
-                      </div>
-                      <div className="flex items-center gap-2.5 flex-1 min-w-0">
-                        <span className="text-blue-400/65 flex-shrink-0">{step.icon}</span>
-                        <h3 className="text-white font-medium text-base truncate">{step.title}</h3>
-                      </div>
-                      <button
-                        onClick={() =>
-                          setMobileOpen(prev => (prev === idx ? null : idx))
-                        }
-                        className={`
-                          shrink-0 w-8 h-8 flex items-center justify-center rounded-lg
-                          border transition-all duration-250
-                          ${isOpen
-                            ? 'border-blue-500/30 text-blue-400'
-                            : 'border-white/8 text-slate-400 hover:text-blue-400 hover:border-blue-500/25'
-                          }
-                        `}
-                        aria-label={isOpen ? 'Collapse' : 'Expand'}
-                      >
-                        <svg
-                          width="13" height="13" viewBox="0 0 24 24" fill="none"
-                          stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
-                          className={`transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`}
-                        >
-                          <polyline points="6 9 12 15 18 9" />
-                        </svg>
-                      </button>
-                    </div>
-
-                    {/* Expandable body */}
-                    <div
-                      className={`transition-all duration-500 ease-out overflow-hidden ${
-                        isOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
-                      }`}
-                    >
-                      <div className="px-5 pb-5 border-t border-white/5 pt-4">
-                        <p className="text-slate-400 text-sm leading-relaxed mb-4">{step.desc}</p>
-                        <ul className="space-y-2">
-                          {step.detail.map((d) => (
-                            <li key={d} className="flex items-center gap-2.5 text-xs text-slate-500">
-                              <span
-                                className="w-1 h-1 rounded-full flex-shrink-0"
-                                style={{ background: 'rgba(59,130,246,0.60)' }}
-                              />
-                              {d}
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
+            {steps.map((step, idx) => (
+              <div
+                key={step.num}
+                data-card
+                style={{
+                  width: 200,
+                  flexShrink: 0,
+                  marginTop: STAGGER[idx] * 0.55,
+                  opacity: animated ? 1 : 0,
+                  transform: animated ? 'translateY(0px)' : 'translateY(24px)',
+                  transition: `opacity 0.65s cubic-bezier(0.16,1,0.3,1) ${idx * 90}ms,
+                               transform 0.65s cubic-bezier(0.16,1,0.3,1) ${idx * 90}ms`,
+                }}
+                className="rounded-2xl border border-white/5 overflow-hidden bg-slate-900/40 backdrop-blur-xl"
+              >
+                <StepVisual icon={step.icon} num={step.num} />
+                <div style={{ height: 1, background: 'rgba(255,255,255,0.04)', margin: '0 14px' }} />
+                <div className="px-4 pt-3 pb-5">
+                  <h3 className="text-white text-sm font-medium tracking-tight leading-snug mb-3">
+                    {step.title}
+                  </h3>
+                  <ul className="space-y-1.5">
+                    {step.detail.map((d) => (
+                      <li key={d} className="flex items-start gap-2">
+                        <span
+                          className="mt-[5px] w-1 h-1 rounded-full flex-shrink-0"
+                          style={{ background: 'rgba(59,130,246,0.55)' }}
+                        />
+                        <span className="text-slate-500 text-[11px] leading-snug">{d}</span>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
-              );
-            })}
-          </div>
-
-          {/* Dot indicator */}
-          <div className="flex justify-center gap-1.5 mt-5">
-            {steps.map((_, idx) => (
-              <button
-                key={idx}
-                onClick={() => handleMobileTabClick(idx)}
-                aria-label={`Go to step ${idx + 1}`}
-                className={`rounded-full transition-all duration-300 ${
-                  mobileTab === idx ? 'w-4 h-1.5 bg-blue-500' : 'w-1.5 h-1.5 bg-white/14'
-                }`}
-              />
+              </div>
             ))}
           </div>
-
         </div>
+
+        <p className="md:hidden text-xs text-slate-500 text-center mt-2">
+          Swipe to explore our process →
+        </p>
+
       </div>
     </section>
   );
