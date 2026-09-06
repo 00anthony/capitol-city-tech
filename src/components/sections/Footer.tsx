@@ -1,9 +1,11 @@
-
+'use client'
 import React from 'react';
 import Image from 'next/image';
 import { Instagram, Facebook, } from 'lucide-react';
+import { useConsultationForm } from '@/context/ConsultationFormContext';
 
 const Footer: React.FC = () => {
+  const { openForm } = useConsultationForm();
   return (
     <footer className="border-t border-white/5 bg-[#020617] pt-20 pb-8 relative overflow-hidden">
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-3xl h-px bg-linear-to-r from-transparent via-blue-500/50 to-transparent"></div>
@@ -55,7 +57,7 @@ const Footer: React.FC = () => {
             <h4 className="text-white font-medium mb-4">Company</h4>
             <ul className="space-y-3 text-sm text-slate-500">
               <li><a href="#about" className="hover:text-blue-400 transition-colors">About</a></li>
-              <li><a href="#contact" className="hover:text-blue-400 transition-colors">Contact</a></li>
+              <li><button onClick={openForm} className="hover:text-blue-400 transition-colors cursor-pointer">Contact</button></li>
             </ul>
           </div>
         </div>

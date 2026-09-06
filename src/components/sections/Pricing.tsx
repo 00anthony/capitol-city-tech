@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useConsultationForm } from "@/context/ConsultationFormContext";
 
 interface PricingTier {
   id: string;
@@ -110,6 +111,7 @@ const MAINTENANCE_PLANS: MaintenancePlan[] = [
 export default function Pricing() {
   const [hoveredTier, setHoveredTier] = useState<string | null>(null);
   const [hoveredPlan, setHoveredPlan] = useState<string | null>(null);
+  const { openForm } = useConsultationForm();
 
   return (
     <section id="pricing" className="relative w-full py-24 px-4 bg-[#07070d] overflow-hidden">
@@ -268,6 +270,7 @@ export default function Pricing() {
 
                   {/* CTA */}
                   <button
+                    onClick={openForm}
                     className="mt-6 w-full py-3 rounded-xl text-sm font-semibold transition-all duration-200 cursor-pointer"
                     style={{
                       background: isFeatured
@@ -391,6 +394,7 @@ export default function Pricing() {
                   </ul>
 
                   <button
+                    onClick={openForm}
                     className="mt-5 w-full py-2.5 rounded-xl text-sm font-medium transition-all duration-200 cursor-pointer"
                     style={{
                       background: isFeatured
@@ -413,9 +417,9 @@ export default function Pricing() {
         {/* Footer note */}
         <p className="text-center text-slate-600 text-sm mt-10">
           Not sure which tier fits?{" "}
-          <a href="#contact" className="text-blue-400/80 hover:text-blue-400 transition-colors underline underline-offset-2">
+          <button onClick={openForm} className="text-blue-400/80 hover:text-blue-400 transition-colors underline underline-offset-2 cursor-pointer">
             Let&apos;s talk
-          </a>{" "}
+          </button>{" "}
           — we&apos;ll figure it out together.
         </p>
       </div>

@@ -9,22 +9,25 @@ import About from '@/components/sections/About';
 import Pricing from '@/components/sections/Pricing';
 import FAQ from '@/components/sections/FAQ';
 import Footer from '@/components/sections/Footer';
+import { ConsultationFormProvider } from '@/context/ConsultationFormContext';
 
 const Page: React.FC = () => {
   return (
-    <div className="relative">
-      <Navbar />
-      <main>
-        <Hero />
-        <Process />
-        <Services />
-        <Portfolio />
-        <About />
-        <Pricing />
-        <FAQ />
-      </main>
-      <Footer />
-    </div>
+    <ConsultationFormProvider>
+      <div className="relative">
+        <Navbar />
+        <main>
+          <Hero />
+          <Process />
+          <Services />
+          <Portfolio />
+          <About />
+          <Pricing />
+          <FAQ />
+        </main>
+        <Footer />
+      </div>
+    </ConsultationFormProvider>
   );
 };
 

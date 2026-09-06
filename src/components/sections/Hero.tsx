@@ -2,8 +2,10 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import DashboardMockup from '@/components/dashboard/DashboardMockup';
+import { useConsultationForm } from '@/context/ConsultationFormContext';
 
 const Hero: React.FC = () => {
+  const { openForm } = useConsultationForm();
   return (
     <section className="lg:pt-48 lg:pb-32 pt-32 pb-20 relative z-10">
       <motion.div 
@@ -29,15 +31,21 @@ const Hero: React.FC = () => {
         </p>
 
         <div className="flex flex-col sm:flex-row gap-4 items-center justify-center mb-20">
-          <button className="group relative px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white text-sm font-medium rounded-lg transition-all shadow-[0_0_20px_-5px_rgba(37,99,235,0.4)] flex items-center gap-2 overflow-hidden">
+          <button
+            onClick={openForm}
+            className="group relative px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white text-sm font-medium rounded-lg transition-all shadow-[0_0_20px_-5px_rgba(37,99,235,0.4)] flex items-center gap-2 overflow-hidden"
+          >
             <div className="absolute inset-0 w-full h-full bg-linear-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:animate-shimmer"></div>
             <span>Book Consultation</span>
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="group-hover:translate-x-1 transition-transform"><path d="M5 12h14m-7-7l7 7l-7 7"></path></svg>
           </button>
-          <button className="px-6 py-3 bg-slate-900 border border-slate-800 text-slate-300 text-sm font-medium rounded-lg hover:border-slate-600 transition-all flex items-center gap-2">
+          <a
+            href="#work"
+            className="px-6 py-3 bg-slate-900 border border-slate-800 text-slate-300 text-sm font-medium rounded-lg hover:border-slate-600 transition-all flex items-center gap-2"
+          >
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-slate-500"><path d="M9 9.003a1 1 0 0 1 1.517-.859l4.997 2.997a1 1 0 0 1 0 1.718l-4.997 2.997A1 1 0 0 1 9 14.996z"></path><circle cx="12" cy="12" r="10"></circle></svg>
-            View Our Work 
-          </button>
+            View Our Work
+          </a>
         </div>
 
         <DashboardMockup />

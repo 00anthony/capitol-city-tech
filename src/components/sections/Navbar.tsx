@@ -2,6 +2,7 @@
 import Image from 'next/image';
 import React, { useState, useEffect } from 'react';
 import { Instagram, Facebook, } from 'lucide-react';
+import { useConsultationForm } from '@/context/ConsultationFormContext';
 
 
 const NAV_LINKS = [
@@ -15,6 +16,7 @@ const NAV_LINKS = [
 
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const { openForm } = useConsultationForm();
 
   /* Lock / unlock body scroll when mobile menu opens */
   useEffect(() => {
@@ -56,7 +58,10 @@ const Navbar: React.FC = () => {
             <button className="cursor-not-allowed text-xs font-medium text-slate-700 transition-colors">
               Sign In
             </button>
-            <button className="bg-white text-black text-xs font-medium px-4 py-2 rounded-full hover:bg-slate-200 transition-all shadow-[0_0_15px_-3px_rgba(255,255,255,0.3)]">
+            <button
+              onClick={openForm}
+              className="bg-white text-black text-xs font-medium px-4 py-2 rounded-full hover:bg-slate-200 transition-all shadow-[0_0_15px_-3px_rgba(255,255,255,0.3)]"
+            >
               Start Project
             </button>
           </div>
@@ -122,13 +127,12 @@ const Navbar: React.FC = () => {
             <button className="cursor-not-allowed text-sm font-medium text-slate-700 px-3 py-3 text-center transition-colors ">
               Sign In
             </button>
-            <a
-              href="#contact"
-              onClick={close}
+            <button
+              onClick={() => { close(); openForm(); }}
               className="bg-white text-black text-sm font-medium px-4 py-3 rounded-full hover:bg-slate-200 transition-all shadow-[0_0_15px_-3px_rgba(255,255,255,0.3)]"
             >
               Start Project
-            </a>
+            </button>
 
             {/* social links on mobile */}
             <div className="flex items-center justify-center gap-4 mt-2">

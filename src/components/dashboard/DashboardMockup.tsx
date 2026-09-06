@@ -1,10 +1,10 @@
 'use client'
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
-import ConsultationForm from '@/components/ConsultationForm';
 import type { DashboardTab } from '@/types';
 import { clients } from '@/data/clients';
 import { getProjectBoard } from '@/lib/projectBoard';
+import { useConsultationForm } from '@/context/ConsultationFormContext';
 import { Sidebar } from './Sidebar';
 import { MobileDrawer } from './MobileDrawer';
 import { ClientCard } from './ClientCard';
@@ -15,9 +15,9 @@ const DashboardMockup: React.FC = () => {
   const [activeTab, setActiveTab] = useState<DashboardTab>('Dashboard');
   const [searchQuery, setSearchQuery] = useState('');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isFormOpen, setIsFormOpen] = useState(false);
   const [selectedClientId, setSelectedClientId] = useState<string | null>(null);
   const [isClientModalOpen, setIsClientModalOpen] = useState(false);
+  const { openForm } = useConsultationForm();
 
   const handleSelectTab = (tab: DashboardTab) => {
     setActiveTab(tab);
@@ -47,8 +47,6 @@ const DashboardMockup: React.FC = () => {
 
   return (
     <div className="relative max-w-6xl mx-auto transform transition-transform duration-700">
-      <ConsultationForm isOpen={isFormOpen} onClose={() => setIsFormOpen(false)} />
-
       <ClientDirectoryModal
         isOpen={isClientModalOpen}
         onClose={() => setIsClientModalOpen(false)}
@@ -107,7 +105,7 @@ const DashboardMockup: React.FC = () => {
               </div>
               <div className="flex items-center gap-4">
                 <button
-                  onClick={() => setIsFormOpen(true)}
+                  onClick={openForm}
                   aria-label="start your project"
                   className="flex items-center justify-center bg-blue-600 hover:bg-blue-500 text-white w-9 h-9 rounded-lg transition-all shadow-lg active:scale-90 cursor-pointer"
                 >
