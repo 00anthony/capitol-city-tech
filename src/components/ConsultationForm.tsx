@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 
 interface ConsultationFormProps {
   isOpen: boolean;
@@ -7,6 +7,11 @@ interface ConsultationFormProps {
 }
 
 const ConsultationForm: React.FC<ConsultationFormProps> = ({ isOpen, onClose }) => {
+  useEffect(() => {
+    document.body.style.overflow = isOpen ? 'hidden' : '';
+    return () => { document.body.style.overflow = ''; };
+  }, [isOpen]);
+
   if (!isOpen) return null;
 
   const handleSubmit = (e: React.FormEvent) => {

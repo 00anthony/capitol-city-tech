@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import ConsultationForm from './ConsultationForm';
 
@@ -27,6 +27,85 @@ interface Card {
   gradient?: string;
   link?: string;
 }
+
+type ProjectBoard = { todo: Card[]; inProgress: Card[]; inReview: Card[]; complete: Card[] };
+
+const TAG_COLOR: Record<Card['tag'], string> = {
+  Low: 'bg-green-500/10 text-green-400 border-green-500/20',
+  Medium: 'bg-blue-500/10 text-blue-400 border-blue-500/20',
+  High: 'bg-orange-500/10 text-orange-400 border-orange-500/20',
+};
+
+/* ─── Generic phase templates, reused across every project's board ───────── */
+const TASK_TEMPLATES: Record<string, { title: string; desc: string; tag: Card['tag'] }> = {
+  strategy: { title: 'Strategy & Discovery', desc: 'Stakeholder interviews, competitive audit, and roadmap.', tag: 'Low' },
+  content: { title: 'Content & Asset Collection', desc: 'Copy, photography, and brand assets gathered.', tag: 'Low' },
+  wireframes: { title: 'Wireframes & Architecture', desc: 'Low-fidelity structure for every core page.', tag: 'Low' },
+  design: { title: 'High-Fidelity Design', desc: 'Figma mockups for desktop and mobile breakpoints.', tag: 'Medium' },
+  development: { title: 'Core Development', desc: 'React / Next.js build of the primary page templates.', tag: 'Medium' },
+  integrations: { title: 'API & CMS Integration', desc: 'Third-party services and content wired in.', tag: 'Medium' },
+  revisions: { title: 'Client Revisions', desc: 'Feedback round incorporated into the build.', tag: 'Medium' },
+  qa: { title: 'QA & Accessibility Pass', desc: 'Cross-browser testing and a WCAG audit.', tag: 'High' },
+  launch: { title: 'Launch Prep', desc: 'DNS cutover, monitoring, and a final smoke test.', tag: 'High' },
+};
+
+const taskCard = (clientId: string, key: keyof typeof TASK_TEMPLATES): Card => {
+  const t = TASK_TEMPLATES[key];
+  return { id: `${clientId}-${key}`, title: t.title, desc: t.desc, tag: t.tag, tagColor: TAG_COLOR[t.tag] };
+};
+
+/* ─── Derives each client's kanban board from their real status/progress ── */
+const getProjectBoard = (client: Client): ProjectBoard => {
+  if (client.status === 'Complete') {
+    return {
+      todo: [],
+      inProgress: [],
+      inReview: [],
+      complete: [{
+        id: `${client.id}-launched`,
+        title: `${client.name} — Launched`,
+        desc: 'Delivered and live in production.',
+        tag: 'Low',
+        tagColor: TAG_COLOR.Low,
+      }],
+    };
+  }
+
+  const p = client.progress;
+  let done: (keyof typeof TASK_TEMPLATES)[] = [];
+  let review: (keyof typeof TASK_TEMPLATES)[] = [];
+  let progress: (keyof typeof TASK_TEMPLATES)[] = [];
+  let todo: (keyof typeof TASK_TEMPLATES)[] = [];
+
+  if (p < 20) {
+    progress = ['strategy'];
+    todo = ['wireframes', 'design'];
+  } else if (p < 45) {
+    done = ['strategy', 'content'];
+    progress = ['wireframes'];
+    todo = ['design'];
+  } else if (p < 70) {
+    done = ['strategy', 'content', 'wireframes'];
+    review = ['design'];
+    progress = ['development'];
+  } else if (p < 90) {
+    done = ['strategy', 'content', 'wireframes', 'design'];
+    review = ['development'];
+    progress = ['integrations'];
+    todo = ['revisions'];
+  } else {
+    done = ['strategy', 'content', 'wireframes', 'design', 'development'];
+    review = ['qa'];
+    todo = ['launch'];
+  }
+
+  return {
+    todo: todo.map(k => taskCard(client.id, k)),
+    inProgress: progress.map(k => taskCard(client.id, k)),
+    inReview: review.map(k => taskCard(client.id, k)),
+    complete: done.map(k => taskCard(client.id, k)),
+  };
+};
 
 /* ─── Fallback silhouette (used when no logoUrl is provided) ─────────────── */
 const UserSilhouette = () => (
@@ -133,27 +212,20 @@ const DashboardMockup: React.FC = () => {
     },
   ];
 
-  const projectData = {
-    todo: [
-      { id: 't1', title: 'Revision Profile Page', desc: 'Create mobile wireframes & Website Task Management...', tag: 'Low', tagColor: 'bg-green-500/10 text-green-400 border-green-500/20' },
-      { id: 't2', title: 'Gradient Style', desc: 'Create a gradient for the example from the wallpaper...', tag: 'Low', tagColor: 'bg-green-500/10 text-green-400 border-green-500/20', gradient: 'from-blue-600 to-purple-500' }
-    ],
-    inProgress: [
-      { id: 't3', title: 'Sign In Page', desc: 'This sign in page will later be used for all products.', tag: 'Low', tagColor: 'bg-green-500/10 text-green-400 border-green-500/20' },
-      { id: 't4', title: 'Wireframe', desc: 'Create wireframes mobile & Website Task Management...', tag: 'Medium', tagColor: 'bg-blue-500/10 text-blue-400 border-blue-500/20', img: 'https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/917d6f93-fb36-439a-8c48-884b67b35381_1600w.jpg' }
-    ],
-    inReview: [
-      { id: 't5', title: 'Mock Up', desc: 'Finalize high fidelity designs for client approval.', tag: 'High', tagColor: 'bg-orange-500/10 text-orange-400 border-orange-500/20' }
-    ],
-    complete: [
-      { id: 't6', title: 'Prototype', desc: 'Full interaction model ready for dev handoff...', tag: 'Medium', tagColor: 'bg-blue-500/10 text-blue-400 border-blue-500/20', img: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=500&auto=format&fit=crop&q=60' }
-    ]
-  };
-
   const filteredClients = clients.filter(c =>
     c.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
     c.description.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+  const selectedClient = selectedClientId ? clients.find(c => c.id === selectedClientId) ?? null : null;
+  const projectBoard = selectedClient ? getProjectBoard(selectedClient) : null;
+
+  /* Lock body scroll while an overlay (client directory or mobile nav) is open */
+  useEffect(() => {
+    const shouldLock = isClientModalOpen || isMobileMenuOpen;
+    document.body.style.overflow = shouldLock ? 'hidden' : '';
+    return () => { document.body.style.overflow = ''; };
+  }, [isClientModalOpen, isMobileMenuOpen]);
 
   /* ─── Client card (Dashboard grid + condensed modal list) ──────────────── */
   const renderClientCard = (client: Client, condensed = false) => {
@@ -237,7 +309,7 @@ const DashboardMockup: React.FC = () => {
     );
   };
 
-  const renderCard = (card: any) => (
+  const renderCard = (card: Card) => (
     <div key={card.id} className="bg-white/5  p-4 rounded-xl border border-white/5 hover:border-white/20 transition-all group cursor-pointer shadow-lg shadow-black/20 block hover:bg-white/[0.07]">
       {card.img && <div className="w-full h-24 rounded-lg bg-slate-800/50 mb-3 overflow-hidden opacity-80 group-hover:opacity-100 transition-opacity"><img src={card.img} className="w-full h-full object-cover" alt={card.title} /></div>}
       {card.gradient && <div className={`w-full h-16 rounded-lg bg-linear-to-r ${card.gradient} mb-3 opacity-60 group-hover:opacity-80 transition-opacity`}></div>}
@@ -309,8 +381,55 @@ const DashboardMockup: React.FC = () => {
         </svg>
       ),
     },
-    
+
   ];
+
+  /* ─── Shared nav list, reused by the desktop sidebar and the mobile drawer ── */
+  const renderSidebarNav = (onNavigate?: () => void) => (
+    <div className="space-y-1">
+      {sidebarItems.map(item => {
+        if (item.href) {
+          return (
+            <a
+              key={item.id}
+              href={item.href}
+              onClick={onNavigate}
+              className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all text-xs font-medium text-slate-400 hover:text-white hover:bg-white/5"
+            >
+              {item.icon}
+              {item.name}
+            </a>
+          );
+        }
+
+        return (
+          <button
+            key={item.id}
+            disabled={item.locked}
+            onClick={() => {
+              setActiveTab(item.name as 'Dashboard' | 'My Task');
+              if (item.name === 'My Task') setSelectedClientId(null);
+              onNavigate?.();
+            }}
+            className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all text-xs font-medium
+              ${activeTab === item.name
+                ? 'text-white bg-white/10 border border-white/5'
+                : 'text-slate-400 hover:text-white hover:bg-white/5'}
+              ${item.locked ? 'opacity-40 cursor-not-allowed' : ''}`}
+          >
+            {item.icon}
+            {item.name}
+            {item.locked && (
+              <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="ml-auto">
+                <rect width="18" height="11" x="3" y="11" rx="2" ry="2"></rect>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+              </svg>
+            )}
+          </button>
+        );
+      })}
+    </div>
+  );
 
   return (
     <div className="relative max-w-6xl mx-auto transform  transition-transform duration-700">
@@ -331,6 +450,30 @@ const DashboardMockup: React.FC = () => {
             <div className="p-4 overflow-y-auto space-y-2 dashboard-scroll">
               {clients.map(client => renderClientCard(client, true))}
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* Mobile sidebar drawer */}
+      {isMobileMenuOpen && (
+        <div className="fixed inset-0 z-100 lg:hidden">
+          <div
+            onClick={() => setIsMobileMenuOpen(false)}
+            className="absolute inset-0 bg-slate-950/60 backdrop-blur-sm"
+          />
+          <div className="absolute left-0 top-0 bottom-0 w-64 bg-slate-950/95 backdrop-blur-xl border-r border-white/10 p-6 flex flex-col shadow-2xl">
+            <div className="flex items-center justify-between mb-10">
+              <div className="flex items-center gap-2 text-white font-medium">
+                <Image src="/logo-white.png" alt="logo" height={32} width={26} />
+                <span className="text-xs">Capitol City Tech</span>
+              </div>
+              <button onClick={() => setIsMobileMenuOpen(false)} className="text-slate-500 hover:text-white p-1">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M18 6 6 18"></path><path d="m6 6 12 12"></path>
+                </svg>
+              </button>
+            </div>
+            {renderSidebarNav(() => setIsMobileMenuOpen(false))}
           </div>
         </div>
       )}
@@ -363,48 +506,7 @@ const DashboardMockup: React.FC = () => {
               <span className="text-xs">Capitol City Tech</span>
             </div>
 
-            <div className="space-y-1">
-              {sidebarItems.map(item => {
-                /* Testimonials: plain anchor navigating to /#testimonials */
-                if (item.href) {
-                  return (
-                    <a
-                      key={item.id}
-                      href={item.href}
-                      className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all text-xs font-medium text-slate-400 hover:text-white hover:bg-white/5"
-                    >
-                      {item.icon}
-                      {item.name}
-                    </a>
-                  );
-                }
-
-                return (
-                  <button
-                    key={item.id}
-                    disabled={item.locked}
-                    onClick={() => {
-                      setActiveTab(item.name as any);
-                      if (item.name === 'My Task') setSelectedClientId(null);
-                    }}
-                    className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all text-xs font-medium
-                      ${activeTab === item.name
-                        ? 'text-white bg-white/10 border border-white/5'
-                        : 'text-slate-400 hover:text-white hover:bg-white/5'}
-                      ${item.locked ? 'opacity-40 cursor-not-allowed' : ''}`}
-                  >
-                    {item.icon}
-                    {item.name}
-                    {item.locked && (
-                      <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="ml-auto">
-                        <rect width="18" height="11" x="3" y="11" rx="2" ry="2"></rect>
-                        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-                      </svg>
-                    )}
-                  </button>
-                );
-              })}
-            </div>
+            {renderSidebarNav()}
 
             <div className="mt-auto pt-6 border-t border-white/5 flex items-center gap-3">
               <div className="cursor-not-allowed w-8 h-8 rounded-full overflow-hidden bg-slate-800"><UserSilhouette /></div>
@@ -479,7 +581,10 @@ const DashboardMockup: React.FC = () => {
               <div className="flex items-center justify-between mb-8 shrink-0">
                 <div className="flex items-center gap-3">
                   {selectedClientId && activeTab === 'My Task' && (
-                    <button onClick={() => setSelectedClientId(null)} className="p-2 -ml-2 text-slate-500 hover:text-white transition-colors">
+                    <button
+                      onClick={() => { setSelectedClientId(null); setActiveTab('Dashboard'); }}
+                      className="p-2 -ml-2 text-slate-500 hover:text-white transition-colors"
+                    >
                       <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                         <path d="m15 18-6-6 6-6"></path>
                       </svg>
@@ -489,12 +594,12 @@ const DashboardMockup: React.FC = () => {
                     <div className="text-[10px] uppercase tracking-wider text-slate-500 mb-1">
                       {activeTab === 'Dashboard'
                         ? 'Client Partners'
-                        : selectedClientId
-                          ? clients.find(c => c.id === selectedClientId)?.name
+                        : selectedClient
+                          ? selectedClient.name
                           : 'Internal Roadmap'}
                     </div>
                     <h2 className="text-2xl font-semibold text-white">
-                      {activeTab === 'Dashboard' ? 'Ecosystem' : selectedClientId ? 'Project Roadmap' : 'Partner Directory'}
+                      {activeTab === 'Dashboard' ? 'Ecosystem' : selectedClient ? 'Project Roadmap' : 'Select a Client'}
                     </h2>
                   </div>
                 </div>
@@ -532,56 +637,33 @@ const DashboardMockup: React.FC = () => {
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {filteredClients.map(client => renderClientCard(client))}
                   </div>
-                ) : !selectedClientId ? (
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                    {filteredClients.map(client => (
-                      <div
-                        key={client.id}
-                        onClick={() => setSelectedClientId(client.id)}
-                        className="relative overflow-hidden bg-white/5 border border-white/5 rounded-xl p-5 hover:border-blue-500/30 transition-all cursor-pointer group flex flex-col"
-                      >
-                        {/* Hero image in partner directory cards too */}
-                        {client.heroImage && (
-                          <>
-                            <div
-                              className="absolute inset-0 bg-cover bg-center pointer-events-none"
-                              style={{ backgroundImage: `url(${client.heroImage})`, opacity: client.heroOpacity ?? 0.15 }}
-                            />
-                            <div className="absolute inset-0 bg-linear-to-t from-slate-950/80 via-transparent to-transparent pointer-events-none" />
-                          </>
-                        )}
-                        <ClientAvatar client={client} className="relative z-10 w-10 h-10 mb-4 bg-slate-800" />
-                        <h3 className="relative z-10 text-sm font-semibold text-white group-hover:text-blue-400 transition-colors">{client.name}</h3>
-                        <p className="relative z-10 text-xs text-slate-500 mt-2 line-clamp-2 leading-relaxed">{client.description}</p>
-                        <div className="relative z-10 mt-auto pt-6">
-                          <div className="flex justify-between text-[10px] text-slate-500 mb-1">
-                            <span>Development Progress</span>
-                            <span>{client.progress}%</span>
-                          </div>
-                          <div className="w-full h-1 bg-slate-800 rounded-full overflow-hidden">
-                            <div className="h-full bg-blue-500" style={{ width: `${client.progress}%` }}></div>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
+                ) : !selectedClient ? (
+                  <div className="max-w-2xl">
+                    <p className="text-xs text-slate-500 mb-4">Select a client below to view their project roadmap.</p>
+                    <div className="space-y-2">
+                      {filteredClients.map(client => renderClientCard(client, true))}
+                    </div>
                   </div>
                 ) : (
                   <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-                    {[
+                    {([
                       { title: 'To do', key: 'todo', color: 'bg-pink-500' },
                       { title: 'In progress', key: 'inProgress', color: 'bg-yellow-500' },
                       { title: 'In review', key: 'inReview', color: 'bg-blue-500' },
                       { title: 'Complete', key: 'complete', color: 'bg-green-500' }
-                    ].map(col => (
+                    ] as const).map(col => (
                       <div key={col.key} className="flex flex-col gap-4">
                         <div className="flex items-center gap-2 mb-2 sticky top-0 bg-slate-950/20 backdrop-blur-sm py-1 z-10">
                           <div className={`w-1 h-4 rounded-full ${col.color}`}></div>
                           <span className="text-xs font-medium text-white">{col.title}</span>
                           <span className="w-5 h-5 rounded bg-white/5 flex items-center justify-center text-[10px] text-slate-500">
-                            {projectData[col.key as keyof typeof projectData].length}
+                            {projectBoard![col.key].length}
                           </span>
                         </div>
-                        {projectData[col.key as keyof typeof projectData].map(card => renderCard(card))}
+                        {projectBoard![col.key].length > 0
+                          ? projectBoard![col.key].map(card => renderCard(card))
+                          : <p className="text-[10px] text-slate-600 italic">Nothing here.</p>
+                        }
                       </div>
                     ))}
                   </div>
