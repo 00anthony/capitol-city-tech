@@ -112,7 +112,7 @@ export default function Pricing() {
   const [hoveredPlan, setHoveredPlan] = useState<string | null>(null);
 
   return (
-    <section className="relative w-full py-24 px-4 bg-[#07070d] overflow-hidden">
+    <section id="pricing" className="relative w-full py-24 px-4 bg-[#07070d] overflow-hidden">
       {/* Ambient background glow */}
       <div className="pointer-events-none absolute inset-0">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] rounded-full bg-blue-600/10 blur-[120px]" />

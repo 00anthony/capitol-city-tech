@@ -2,31 +2,24 @@
 import React from 'react';
 import Navbar from '../components/Navbar';
 import Hero from '../components/Hero';
-import TechMarquee from '../components/TechMarquee';
 import Process from '../components/Process';
 import Services from '../components/Services';
 import Portfolio from '../components/Portfolio';
 import About from '../components/About';
+import Pricing from '../components/Pricing';
 import FAQ from '../components/FAQ';
 import Footer from '../components/Footer';
-import BackgroundEffects from '../components/BackgroundEffects';
-import Pricing from '../components/Pricing';
 
 const Page: React.FC = () => {
   return (
     <div className="relative">
-      {/*<BackgroundEffects /> commented out for dev performance*/}
-      
       <Navbar />
       <main>
         <Hero />
-        {/*<TechMarquee /> commented out for dev performance*/}
-        
         <Process />
         <Services />
         <Portfolio />
-        
-        {/*<About /> commented out for styling / cluttering */}
+        <About />
         <Pricing />
         <FAQ />
       </main>

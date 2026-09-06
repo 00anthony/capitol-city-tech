@@ -46,27 +46,26 @@ const Footer: React.FC = () => {
           <div>
             <h4 className="text-white font-medium mb-4">Services</h4>
             <ul className="space-y-3 text-sm text-slate-500">
-              <li><a href="#" className="hover:text-blue-400 transition-colors">Web Development</a></li>
-              <li><a href="#" className="hover:text-blue-400 transition-colors">Mobile Apps</a></li>
-              <li><a href="#" className="hover:text-blue-400 transition-colors">UI/UX Design</a></li>
+              <li><a href="#services" className="hover:text-blue-400 transition-colors">Web Development</a></li>
+              <li><a href="#services" className="hover:text-blue-400 transition-colors">Mobile Apps</a></li>
+              <li><a href="#services" className="hover:text-blue-400 transition-colors">UI/UX Design</a></li>
             </ul>
           </div>
 
           <div>
             <h4 className="text-white font-medium mb-4">Company</h4>
             <ul className="space-y-3 text-sm text-slate-500">
-              <li><a href="#" className="hover:text-blue-400 transition-colors">About</a></li>
-              <li><a href="#" className="hover:text-blue-400 transition-colors">Blog</a></li>
-              <li><a href="#" className="hover:text-blue-400 transition-colors">Contact</a></li>
+              <li><a href="#about" className="hover:text-blue-400 transition-colors">About</a></li>
+              <li><a href="#contact" className="hover:text-blue-400 transition-colors">Contact</a></li>
             </ul>
           </div>
         </div>
 
         <div className="border-t border-white/5 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-slate-600">
-          <div>© 2023 Capitol City Tech. All rights reserved.</div>
+          <div>© {new Date().getFullYear()} Capitol City Tech. All rights reserved.</div>
           <div className="flex gap-6">
-            <a href="#" className="hover:text-slate-400">Privacy Policy</a>
-            <a href="#" className="hover:text-slate-400">Terms of Service</a>
+            <span className="cursor-not-allowed text-slate-700" title="Coming soon">Privacy Policy</span>
+            <span className="cursor-not-allowed text-slate-700" title="Coming soon">Terms of Service</span>
           </div>
         </div>
       </div>

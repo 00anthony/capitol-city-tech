@@ -11,25 +11,25 @@ const About: React.FC = () => {
               About Us
             </div>
             <h2 className="text-3xl md:text-4xl font-medium tracking-tighter text-white mb-6">
-              Engineers, designers, and <br /><span className="text-slate-500">problem solvers.</span>
+              One engineer, <br /><span className="text-slate-500">no hand-offs.</span>
             </h2>
             <div className="space-y-4 text-slate-400 font-light text-sm md:text-base leading-relaxed">
               <p>
-                Capitol City Tech was founded on a simple premise: technology should enable potential, not complicate it. We are a collective of senior engineers and designers who have shipped products for Fortune 500s and startups alike.
+                Capitol City Tech is a boutique web development practice — you work directly with the engineer building your site, from the first call to the last deploy. No account managers, no outsourced dev queue, no telephone game.
               </p>
               <p>
-                We believe in code that is clean, architecture that is scalable, and design that is intuitive. Our mission is to bridge the gap between complex technical requirements and seamless user experiences.
+                Every project is built with React, Next.js, and TypeScript: clean code, fast pages, and a site that&apos;s actually maintainable after launch — not just a design mockup wired together to demo well.
               </p>
             </div>
-            
+
             <div className="mt-8 pt-8 border-t border-white/5 flex gap-12">
               <div>
-                <div className="text-3xl font-bold text-white mb-1">50+</div>
-                <div className="text-[10px] uppercase tracking-wider text-slate-500">Enterprise Projects</div>
+                <div className="text-3xl font-bold text-white mb-1">1:1</div>
+                <div className="text-[10px] uppercase tracking-wider text-slate-500">Direct Access, Start to Finish</div>
               </div>
               <div>
                 <div className="text-3xl font-bold text-white mb-1">100%</div>
-                <div className="text-[10px] uppercase tracking-wider text-slate-500">On-Time Delivery</div>
+                <div className="text-[10px] uppercase tracking-wider text-slate-500">Custom-Built, No Templates</div>
               </div>
             </div>
           </div>
