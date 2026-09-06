@@ -49,7 +49,7 @@ const About: React.FC = () => {
                 <div className="space-y-2 font-mono text-[10px] text-slate-400">
                   <div className="flex"><span className="text-purple-400 mr-2">const</span> <span className="text-blue-400">future</span> = <span className="text-yellow-300">await</span> build();</div>
                   <div className="flex"><span className="text-purple-400 mr-2">if</span> (success) {"{"}</div>
-                  <div className="pl-4 flex"><span className="text-blue-400">scale</span>(<span className="text-orange-400">'infinity'</span>);</div>
+                  <div className="pl-4 flex"><span className="text-blue-400">scale</span>(<span className="text-orange-400">&apos;infinity&apos;</span>);</div>
                   <div className="flex">{"}"}</div>
                 </div>
               </div>

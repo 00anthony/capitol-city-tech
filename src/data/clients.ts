@@ -1,0 +1,86 @@
+import type { Client } from '@/types';
+
+/**
+ * Single source of truth for real client data — feeds the dashboard
+ * mockup, the Portfolio section, and (eventually) the resume's project
+ * directory, so every surface stays in sync on name/link/status.
+ */
+export const clients: Client[] = [
+  {
+    id: 'c1',
+    name: 'Luvera',
+    industry: 'Skincare',
+    industryColor: 'bg-rose-500/10 text-rose-400 border-rose-500/20',
+    status: 'Active',
+    progress: 90,
+    description: 'Luxury skincare brand specializing in moisturizers.',
+    logoUrl: '/dashboard-cards/luvera-icon.png',
+    heroImage: '/dashboard-cards/luvera-hero.png',
+    heroOpacity: 0.18,
+    link: 'https://useluvera.com',
+    portfolio: {
+      tag: 'E-commerce',
+      image: '/portfolio/luvera.png',
+      description: 'Advanced interactive visual rebrand built to match luxury aesthetic.',
+      hoverClass: 'group-hover:text-violet-400',
+    },
+  },
+  {
+    id: 'c2',
+    name: 'Far Out Media',
+    industry: 'Videography',
+    industryColor: 'bg-purple-500/10 text-purple-400 border-purple-500/20',
+    status: 'Complete',
+    progress: 100,
+    description: 'Industry-leading commercial, promotional, and event videography.',
+    logoUrl: '/dashboard-cards/faroutmedia-logo.png',
+    heroImage: '/dashboard-cards/faroutmedia-hero.png',
+    heroOpacity: 0.15,
+    link: 'https://faroutmediaco.com',
+  },
+  {
+    id: 'c3',
+    name: 'Design by Evangelina',
+    industry: 'Marketing',
+    industryColor: 'bg-amber-500/10 text-amber-400 border-amber-500/20',
+    status: 'Complete',
+    progress: 100,
+    description: 'Versatile, enterprise-level design and marketing services.',
+    logoUrl: '/dashboard-cards/designbyevangelina-headshot.png',
+    heroImage: '/dashboard-cards/designbyevangelina-hero.png',
+    heroOpacity: 0.12,
+    link: 'https://designbyevangelina.com',
+    portfolio: {
+      tag: 'Lead-generator',
+      image: '/portfolio/designbyevangelina.png',
+      description: 'Custom scrapbook themed portfolio web app for graphic designer.',
+      hoverClass: 'group-hover:text-orange-400',
+    },
+  },
+  {
+    id: 'c4',
+    name: 'PT Roofing & Renovations',
+    industry: 'Contracting',
+    industryColor: 'bg-orange-500/10 text-orange-400 border-orange-500/20',
+    status: 'Active',
+    progress: 90,
+    description: 'Local experts in residential roofing and renovations.',
+    logoUrl: '/dashboard-cards/pt-logo.jpg',
+    heroImage: '/dashboard-cards/pt-hero.png',
+    heroOpacity: 0.15,
+    link: 'https://ptroofingandrenovations.com',
+  },
+  {
+    id: 'c5',
+    name: 'Mastodon Ventures',
+    industry: 'Investment Banking',
+    industryColor: 'bg-cyan-500/10 text-cyan-400 border-cyan-500/20',
+    status: 'Pending',
+    progress: 25,
+    description: 'Expert financial advising in the restaurant industry.',
+    logoUrl: '/dashboard-cards/mastodon-hero.jpg',
+    heroImage: '/dashboard-cards/mastodon-hero.jpg',
+    heroOpacity: 0.1,
+    // link: 'https://mastodonventures.com',
+  },
+];

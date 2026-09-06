@@ -202,7 +202,7 @@ const Process: React.FC = () => {
   }, []);
 
   return (
-    <section id="process" className="py-24 relative z-10 border-b border-white/5">
+    <section id="process" ref={sectionRef} className="py-24 relative z-10 border-b border-white/5">
       <div className="max-w-7xl mx-auto px-6">
 
         {/* Header */}
@@ -214,7 +214,7 @@ const Process: React.FC = () => {
             A process built for clarity
           </h2>
           <p className="text-slate-400 text-sm md:text-base font-light leading-relaxed">
-            Eight stages, no surprises. Every handoff is documented, every decision shared, and you're never left wondering what comes next.
+            Eight stages, no surprises. Every handoff is documented, every decision shared, and you&apos;re never left wondering what comes next.
           </p>
         </div>
 
@@ -225,10 +225,8 @@ const Process: React.FC = () => {
           FIX 2: removed invalid -ml-26 (not a Tailwind utility).
         */}
         <div
-          ref={sectionRef}
           className="hidden md:block md:-ml-24"
           style={{
-            
             // Hide scrollbar cross-browser via inline styles so it's
             // guaranteed to apply regardless of CSS load order.
             msOverflowStyle: 'none',

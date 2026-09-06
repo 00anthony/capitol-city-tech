@@ -8,7 +8,7 @@ const Services: React.FC = () => {
         <div className="text-center max-w-2xl mx-auto mb-16">
           <h2 className="text-3xl md:text-4xl font-medium tracking-tighter text-white mb-4">Full-stack mastery.</h2>
           <p className="text-slate-400 text-sm md:text-base font-light">
-            We don't just build websites. We build scalable, interactive digital ecosystems tailored to your business logic.
+            We don&apos;t just build websites. We build scalable, interactive digital ecosystems tailored to your business logic.
           </p>
         </div>
 

@@ -1,25 +1,8 @@
 import React from 'react';
+import Image from 'next/image';
+import { clients } from '@/data/clients';
 
-const projects = [
-  {
-    title: 'Luvera',
-    desc: 'Advanced interactive visual rebrand built to match luxury aesthetic',
-    tag: 'E-commerce',
-    colorClass: 'bg-violet-900/10',
-    hoverClass: 'group-hover:text-violet-400',
-    imageSrc: '/portfolio/luvera.png',
-    href: 'https://useluvera.com',
-  },
-  {
-    title: 'Design by Evangelina',
-    desc: 'Custom scrapbook themed portfolio web app for graphic designer',
-    tag: 'Lead-generator',
-    colorClass: 'bg-orange-900/20',
-    hoverClass: 'group-hover:text-orange-400',
-    imageSrc: '/portfolio/designbyevangelina.png',
-    href: 'https://designbyevangelina.com',
-  },
-];
+const projects = clients.filter(c => c.portfolio);
 
 const Portfolio: React.FC = () => {
   return (
@@ -30,10 +13,10 @@ const Portfolio: React.FC = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {projects.map((project, i) => (
+          {projects.map((project) => (
             <a
-              key={i}
-              href={project.href}
+              key={project.id}
+              href={project.link}
               target="_blank"
               rel="noopener noreferrer"
               className="group cursor-pointer"
@@ -42,23 +25,25 @@ const Portfolio: React.FC = () => {
                 <div
                   className={`absolute inset-0  group-hover:opacity-50 transition-colors z-10`}
                 />
-                <img
-                  src={project.imageSrc}
-                  alt={project.title}
-                  className="absolute inset-0 w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
+                <Image
+                  src={project.portfolio!.image}
+                  alt={project.name}
+                  fill
+                  sizes="(min-width: 768px) 50vw, 100vw"
+                  className="object-cover object-top group-hover:scale-105 transition-transform duration-500"
                 />
               </div>
               <div className="mt-4 flex justify-between items-start">
                 <div>
                   <h3
-                    className={`text-lg font-medium text-white ${project.hoverClass} transition-colors`}
+                    className={`text-lg font-medium text-white ${project.portfolio!.hoverClass} transition-colors`}
                   >
-                    {project.title}
+                    {project.name}
                   </h3>
-                  <p className="text-xs text-slate-500 mt-1">{project.desc}</p>
+                  <p className="text-xs text-slate-500 mt-1">{project.portfolio!.description}</p>
                 </div>
                 <span className="text-[10px] uppercase tracking-wider text-slate-500 border border-white/10 px-2 py-1 rounded">
-                  {project.tag}
+                  {project.portfolio!.tag}
                 </span>
               </div>
             </a>

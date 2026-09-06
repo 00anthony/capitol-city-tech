@@ -414,9 +414,9 @@ export default function Pricing() {
         <p className="text-center text-slate-600 text-sm mt-10">
           Not sure which tier fits?{" "}
           <a href="#contact" className="text-blue-400/80 hover:text-blue-400 transition-colors underline underline-offset-2">
-            Let's talk
+            Let&apos;s talk
           </a>{" "}
-          — we'll figure it out together.
+          — we&apos;ll figure it out together.
         </p>
       </div>
     </section>

@@ -1,5 +1,6 @@
 
 import React from 'react';
+import Image from 'next/image';
 import { Instagram, Facebook, } from 'lucide-react';
 
 const Footer: React.FC = () => {
@@ -12,14 +13,12 @@ const Footer: React.FC = () => {
           <div className="col-span-1 md:col-span-2">
             <div className="flex items-center gap-2 mb-6">
               <div className="w-8 h-8  flex items-center justify-center text-white">
-                <img 
-                  src='/logo-white.webp'
-                />
+                <Image src="/logo-white.webp" alt="Capitol City Tech logo" width={32} height={32} />
               </div>
               <span className="text-sm font-medium tracking-tight text-white">Capitol City Tech</span>
             </div>
             <p className="text-slate-500 text-sm leading-relaxed max-w-sm mb-6">
-              Building the digital infrastructure for tomorrow's industry leaders. High-performance web development and strategic consulting.
+              Building the digital infrastructure for tomorrow&apos;s industry leaders. High-performance web development and strategic consulting.
             </p>
             <div className="flex gap-4">
               <a 

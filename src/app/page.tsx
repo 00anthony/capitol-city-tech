@@ -1,14 +1,14 @@
 
 import React from 'react';
-import Navbar from '../components/Navbar';
-import Hero from '../components/Hero';
-import Process from '../components/Process';
-import Services from '../components/Services';
-import Portfolio from '../components/Portfolio';
-import About from '../components/About';
-import Pricing from '../components/Pricing';
-import FAQ from '../components/FAQ';
-import Footer from '../components/Footer';
+import Navbar from '@/components/sections/Navbar';
+import Hero from '@/components/sections/Hero';
+import Process from '@/components/sections/Process';
+import Services from '@/components/sections/Services';
+import Portfolio from '@/components/sections/Portfolio';
+import About from '@/components/sections/About';
+import Pricing from '@/components/sections/Pricing';
+import FAQ from '@/components/sections/FAQ';
+import Footer from '@/components/sections/Footer';
 
 const Page: React.FC = () => {
   return (

@@ -1,7 +1,7 @@
 'use client'
 import React from 'react';
 import { motion } from 'framer-motion';
-import DashboardMockup from './DashboardMockup';
+import DashboardMockup from '@/components/dashboard/DashboardMockup';
 
 const Hero: React.FC = () => {
   return (
@@ -25,7 +25,7 @@ const Hero: React.FC = () => {
         </h1>
 
         <p className="text-sm md:text-base text-slate-400 max-w-2xl mx-auto mb-10 leading-relaxed font-light">
-          We don't just build websites, we build the engine that drives your business. Experience real-time collaboration and transparency.
+          We don&apos;t just build websites, we build the engine that drives your business. Experience real-time collaboration and transparency.
         </p>
 
         <div className="flex flex-col sm:flex-row gap-4 items-center justify-center mb-20">
