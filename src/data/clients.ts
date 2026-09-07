@@ -83,4 +83,31 @@ export const clients: Client[] = [
     heroOpacity: 0.1,
     // link: 'https://mastodonventures.com',
   },
+  {
+    id: 'c6',
+    name: 'Trez Construction Group',
+    industry: 'Concrete Contracting',
+    industryColor: 'bg-red-500/10 text-red-400 border-red-500/20',
+    // status/progress are a best guess (site is live and fully built) — adjust to reflect the actual current relationship.
+    status: 'Active',
+    progress: 95,
+    description: 'Premium concrete and general contracting serving Greater Central Texas.',
+    // No logoUrl/heroImage yet — falls back to the silhouette avatar until real
+    // logo/screenshot assets are added to public/dashboard-cards/.
+    link: 'https://www.trezconstruction.com',
+  },
+  {
+    id: 'c7',
+    name: 'Charity Raffle Platform',
+    industry: 'Nonprofit Fundraising',
+    industryColor: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20',
+    // progress reflects: core platform + domain migration verified working end-to-end;
+    // Stripe going live and demo polish still pending per your own plan — adjust as that lands.
+    status: 'Active',
+    progress: 80,
+    description: 'Multi-event raffle and ticketing platform for charity fundraising, with Stripe payments and audited fair drawings.',
+    // No logoUrl/heroImage yet — falls back to the silhouette avatar until real
+    // logo/screenshot assets are added to public/dashboard-cards/.
+    link: 'https://raffles.capitolcity.tech',
+  },
 ];
