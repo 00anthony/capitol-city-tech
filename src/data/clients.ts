@@ -8,9 +8,33 @@ import type { Client } from '@/types';
 export const clients: Client[] = [
   {
     id: 'c1',
+    name: 'Trez Construction Group',
+    industry: 'Contracting',
+    industryColor: 'bg-red-500/10 text-red-400 border-red-500/20',
+    status: 'Active',
+    progress: 95,
+    description: 'Premium concrete and general contracting serving Greater Central Texas.',
+    logoUrl: '/dashboard-cards/trez-icon-light.png',
+    heroImage: '/dashboard-cards/trez-hero.png',
+    link: 'https://www.trezconstruction.com',
+  },
+  {
+    id: 'c2',
+    name: 'Charity Raffle Platform',
+    industry: 'Nonprofit Fundraising',
+    industryColor: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20',
+    status: 'Active',
+    progress: 80,
+    description: 'Multi-event raffle and ticketing platform for charity fundraising, with Stripe payments and audited fair drawings.',
+    // No logoUrl/heroImage yet — falls back to the silhouette avatar until real
+    // logo/screenshot assets are added to public/dashboard-cards/.
+    link: 'https://raffles.capitolcity.tech',
+  },
+  {
+    id: 'c3',
     name: 'Luvera',
-    industry: 'Skincare',
-    industryColor: 'bg-rose-500/10 text-rose-400 border-rose-500/20',
+    industry: 'E-Commerce',
+    industryColor: 'bg-purple-500/10 text-purple-400 border-purple-500/20',
     status: 'Active',
     progress: 90,
     description: 'Luxury skincare brand specializing in moisturizers.',
@@ -26,10 +50,10 @@ export const clients: Client[] = [
     },
   },
   {
-    id: 'c2',
+    id: 'c4',
     name: 'Far Out Media',
     industry: 'Videography',
-    industryColor: 'bg-purple-500/10 text-purple-400 border-purple-500/20',
+    industryColor: 'bg-amber-300/10 text-amber-200 border-amber-300/20',
     status: 'Complete',
     progress: 100,
     description: 'Industry-leading commercial, promotional, and event videography.',
@@ -39,10 +63,10 @@ export const clients: Client[] = [
     link: 'https://faroutmediaco.com',
   },
   {
-    id: 'c3',
+    id: 'c5',
     name: 'Design by Evangelina',
     industry: 'Marketing',
-    industryColor: 'bg-amber-500/10 text-amber-400 border-amber-500/20',
+    industryColor: 'bg-orange-500/10 text-orange-400 border-orange-500/20',
     status: 'Complete',
     progress: 100,
     description: 'Versatile, enterprise-level design and marketing services.',
@@ -58,23 +82,10 @@ export const clients: Client[] = [
     },
   },
   {
-    id: 'c4',
-    name: 'PT Roofing & Renovations',
-    industry: 'Contracting',
-    industryColor: 'bg-orange-500/10 text-orange-400 border-orange-500/20',
-    status: 'Active',
-    progress: 90,
-    description: 'Local experts in residential roofing and renovations.',
-    logoUrl: '/dashboard-cards/pt-logo.jpg',
-    heroImage: '/dashboard-cards/pt-hero.png',
-    heroOpacity: 0.15,
-    link: 'https://ptroofingandrenovations.com',
-  },
-  {
-    id: 'c5',
+    id: 'c6',
     name: 'Mastodon Ventures',
     industry: 'Investment Banking',
-    industryColor: 'bg-cyan-500/10 text-cyan-400 border-cyan-500/20',
+    industryColor: 'bg-blue-500/10 text-blue-400 border-blue-500/20',
     status: 'Pending',
     progress: 25,
     description: 'Expert financial advising in the restaurant industry.',
@@ -84,30 +95,16 @@ export const clients: Client[] = [
     // link: 'https://mastodonventures.com',
   },
   {
-    id: 'c6',
-    name: 'Trez Construction Group',
-    industry: 'Concrete Contracting',
-    industryColor: 'bg-red-500/10 text-red-400 border-red-500/20',
-    // status/progress are a best guess (site is live and fully built) — adjust to reflect the actual current relationship.
-    status: 'Active',
-    progress: 95,
-    description: 'Premium concrete and general contracting serving Greater Central Texas.',
-    // No logoUrl/heroImage yet — falls back to the silhouette avatar until real
-    // logo/screenshot assets are added to public/dashboard-cards/.
-    link: 'https://www.trezconstruction.com',
-  },
-  {
     id: 'c7',
-    name: 'Charity Raffle Platform',
-    industry: 'Nonprofit Fundraising',
-    industryColor: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20',
-    // progress reflects: core platform + domain migration verified working end-to-end;
-    // Stripe going live and demo polish still pending per your own plan — adjust as that lands.
+    name: 'PT Roofing & Renovations',
+    industry: 'Contracting',
+    industryColor: 'bg-amber-500/10 text-amber-400 border-amber-500/20',
     status: 'Active',
-    progress: 80,
-    description: 'Multi-event raffle and ticketing platform for charity fundraising, with Stripe payments and audited fair drawings.',
-    // No logoUrl/heroImage yet — falls back to the silhouette avatar until real
-    // logo/screenshot assets are added to public/dashboard-cards/.
-    link: 'https://raffles.capitolcity.tech',
+    progress: 90,
+    description: 'Local experts in residential roofing and renovations.',
+    logoUrl: '/dashboard-cards/pt-logo.jpg',
+    heroImage: '/dashboard-cards/pt-hero.png',
+    heroOpacity: 0.15,
+    link: 'https://ptroofingandrenovations.com',
   },
 ];
