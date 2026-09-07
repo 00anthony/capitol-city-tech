@@ -39,6 +39,7 @@ const Navbar: React.FC = () => {
                 alt='logo'
                 height={50}
                 width={50}
+                priority
                 className='mb-2 '
               />
             </div>

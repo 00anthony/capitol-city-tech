@@ -19,7 +19,7 @@ export const MobileDrawer: React.FC<MobileDrawerProps> = ({ isOpen, onClose, act
       <div className="absolute left-0 top-0 bottom-0 w-64 bg-slate-950/95 backdrop-blur-xl border-r border-white/10 p-6 flex flex-col shadow-2xl">
         <div className="flex items-center justify-between mb-10">
           <div className="flex items-center gap-2 text-white font-medium">
-            <Image src="/logo-white.png" alt="logo" height={32} width={26} />
+            <Image src="/logo-white.png" alt="logo" height={32} width={32} />
             <span className="text-xs">Capitol City Tech</span>
           </div>
           <button onClick={onClose} className="text-slate-500 hover:text-white p-1">

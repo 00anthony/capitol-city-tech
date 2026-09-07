@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import { organizationSchema } from "@/lib/organizationSchema";
 
 export const inter = Inter({
   subsets: ["latin"],
@@ -46,6 +47,11 @@ export const metadata: Metadata = {
     canonical: "/",
   },
 
+  robots: {
+    index: true,
+    follow: true,
+  },
+
   openGraph: {
     title: "Capitol City Tech",
     description:
@@ -55,7 +61,7 @@ export const metadata: Metadata = {
     images: [
       {
         url: "/og-image.png",
-        width: 1048,
+        width: 1086,
         height: 630,
         alt: "Capitol City Tech",
       },
@@ -87,6 +93,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.className} font-sans`}>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
+        />
         {children}
       </body>
     </html>

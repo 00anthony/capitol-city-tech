@@ -12,7 +12,7 @@ interface SidebarProps {
 export const Sidebar: React.FC<SidebarProps> = ({ activeTab, onSelectTab }) => (
   <div className="w-64 border-r border-white/5 bg-white/2 backdrop-blur-md hidden lg:flex flex-col p-6 shrink-0">
     <div className="flex items-center gap-2 mb-10 -mt-2 text-white font-medium">
-      <Image src="/logo-white.png" alt="logo" height={50} width={40} className="mb-2" />
+      <Image src="/logo-white.png" alt="logo" height={40} width={40} className="mb-2" />
       <span className="text-xs">Capitol City Tech</span>
     </div>
 
