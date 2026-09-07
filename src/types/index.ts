@@ -34,3 +34,34 @@ export type ProjectBoard = {
 };
 
 export type DashboardTab = 'Dashboard' | 'My Task';
+
+export interface WorkExperience {
+  role: string;
+  company: string;
+  location: string;
+  period: string;
+  bullets: string[];
+}
+
+export interface ResumeProject {
+  id: string;
+  name: string;
+  stack: string[];
+  bullets: string[];
+  link?: string;
+  linkLabel?: string;
+}
+
+export interface SkillCategory {
+  category: string;
+  items: string[];
+}
+
+export interface EducationEntry {
+  school: string;
+  location: string;
+  degree: string;
+  minor?: string;
+  status: string;
+  coursework?: string[];
+}

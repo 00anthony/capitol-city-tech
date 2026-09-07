@@ -1,6 +1,7 @@
 'use client'
 import React from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { Instagram, Facebook, } from 'lucide-react';
 import { useConsultationForm } from '@/context/ConsultationFormContext';
 
@@ -57,6 +58,7 @@ const Footer: React.FC = () => {
             <h4 className="text-white font-medium mb-4">Company</h4>
             <ul className="space-y-3 text-sm text-slate-500">
               <li><a href="#about" className="hover:text-blue-400 transition-colors">About</a></li>
+              <li><Link href="/resume" className="hover:text-blue-400 transition-colors">Resume</Link></li>
               <li><button onClick={openForm} className="hover:text-blue-400 transition-colors cursor-pointer">Contact</button></li>
             </ul>
           </div>
