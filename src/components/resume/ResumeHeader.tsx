@@ -10,7 +10,7 @@ export const ResumeHeader: React.FC = () => (
         Capitol City Tech
       </Link>
       <a
-        href="/resume.pdf"
+        href="/Anthony_Tijerina_Resume.pdf"
         download="Anthony_Tijerina_Resume.pdf"
         className="flex items-center gap-2 bg-white text-black text-xs font-medium px-4 py-2 rounded-full hover:bg-slate-200 transition-all"
       >
