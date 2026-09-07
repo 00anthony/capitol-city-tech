@@ -42,25 +42,61 @@ export async function POST(request: Request) {
   const resend = new Resend(apiKey);
   const toAddress = process.env.CONTACT_TO_EMAIL || 'anthonytij3@gmail.com';
   const fromAddress = process.env.CONTACT_FROM_EMAIL || 'Capitol City Tech <onboarding@resend.dev>';
+  const trimmedName = name.trim();
+  const trimmedEmail = email.trim();
+  const trimmedType = projectType.trim();
+  const trimmedMessage = message?.trim();
 
   try {
     const { error } = await resend.emails.send({
       from: fromAddress,
       to: toAddress,
-      replyTo: email.trim(),
-      subject: `New project inquiry from ${name.trim()}`,
+      replyTo: trimmedEmail,
+      subject: `New project inquiry from ${trimmedName}`,
       text: [
-        `Name: ${name.trim()}`,
-        `Email: ${email.trim()}`,
-        `Project type: ${projectType.trim()}`,
+        `Name: ${trimmedName}`,
+        `Email: ${trimmedEmail}`,
+        `Project type: ${trimmedType}`,
         '',
-        message?.trim() ? `Message:\n${message.trim()}` : 'No message provided.',
+        trimmedMessage ? `Message:\n${trimmedMessage}` : 'No message provided.',
       ].join('\n'),
     });
 
     if (error) {
       console.error('Resend send failed:', error);
       return NextResponse.json({ ok: false, error: 'Could not send your message. Please try again shortly.' }, { status: 502 });
+    }
+
+    // Best-effort confirmation to the submitter — their inquiry is already
+    // captured above, so a failure here shouldn't turn into an error for them.
+    try {
+      const { error: confirmationError } = await resend.emails.send({
+        from: fromAddress,
+        to: trimmedEmail,
+        subject: 'We got your message — Capitol City Tech',
+        text: [
+          `Hi ${trimmedName},`,
+          '',
+          `Thanks for reaching out about your ${trimmedType.toLowerCase()} project. We've received your message and will be in touch soon.`,
+          '',
+          'In the meantime, feel free to reply directly to this email if there\'s anything else you want to add.',
+          '',
+          '— Capitol City Tech',
+        ].join('\n'),
+        html: `
+          <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; max-width: 480px; margin: 0 auto; color: #1e293b;">
+            <p>Hi ${trimmedName},</p>
+            <p>Thanks for reaching out about your <strong>${trimmedType.toLowerCase()}</strong> project. We've received your message and will be in touch soon.</p>
+            <p>In the meantime, feel free to reply directly to this email if there's anything else you want to add.</p>
+            <p style="color: #64748b;">— Capitol City Tech</p>
+          </div>
+        `,
+      });
+      if (confirmationError) {
+        console.error('Confirmation email failed to send:', confirmationError);
+      }
+    } catch (confirmationErr) {
+      console.error('Confirmation email threw:', confirmationErr);
     }
 
     return NextResponse.json({ ok: true });
