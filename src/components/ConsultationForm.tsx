@@ -84,6 +84,9 @@ const ConsultationForm: React.FC<ConsultationFormProps> = ({ isOpen, onClose }) 
             </div>
             <p className="text-sm text-white font-medium">Thanks — that&apos;s in.</p>
             <p className="text-xs text-slate-500">We&apos;ll reach out shortly to schedule your consultation.</p>
+            <p className="text-[11px] text-slate-600 bg-white/3 border border-white/5 rounded-lg px-3 py-2 mt-1">
+              We&apos;ve sent a confirmation to <span className="text-slate-400">{fields.email}</span> — if it&apos;s not in your inbox in a few minutes, check your spam or junk folder.
+            </p>
             <button
               onClick={onClose}
               className="mt-2 text-xs font-medium text-slate-400 hover:text-white transition-colors"
@@ -137,7 +140,7 @@ const ConsultationForm: React.FC<ConsultationFormProps> = ({ isOpen, onClose }) 
                 onChange={handleChange('projectType')}
                 className="w-full bg-[#0F1219] border border-white/10 rounded-lg px-3 py-2 text-xs text-slate-300 focus:outline-none focus:border-blue-500/50 transition-all appearance-none"
               >
-                <option>Web Application</option>
+                <option>Website / Web App</option>
                 <option>Mobile App</option>
                 <option>UI/UX Overhaul</option>
                 <option>AI Integration</option>
